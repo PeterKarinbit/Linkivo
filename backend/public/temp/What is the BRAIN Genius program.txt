@@ -1,0 +1,87 @@
+ What is the BRAIN Genius program?
+NL41370
+
+    2 days ago Updated ~1 minute read 
+
+Not yet followed by anyone
+
+The BRAIN Genius program is a leveled system for WorldQuant BRAIN consultants that provides increasing access to data, tools, and opportunities based on performance and activity levels. There are four levels: Gold (default level for new BRAIN consultants), Expert, Master, and Grand Master. These levels are an extension to the user-level levels that you are already familiar with: Bronze, Silver and Gold.
+
+Important links:
+
+    Genius leaderboard
+    Genius status
+ What are the main benefits of advancing to higher levels?
+NL41370
+
+    3 days ago Updated ~2 minute read 
+
+Not yet followed by anyone
+
+Higher levels provide:
+
+    Access to more operators, research regions, datasets and data fields for each level
+    Ability to create SuperAlphas from a wider pool
+    Less frequent requirement for biometrics sign-in
+    Certificates and badges
+    WorldQuant consistently searches for top talent to consider for eligible internship and full-time employment opportunities. In particular, those consultants who reach Master and Grand Master level are more likely to be considered for such internship  and full-time employment opportunities
+    In addition, due to the access to more data, operators and other features, consultants at higher levels have a better opportunity to potentially receive higher quarterly payments amounts.  Consultants who reach the Grand Master level can see increases to their Quarterly Payment amounts of 80x or more, potentially earning upwards of $8,000 or more in a Quarterly Payment amount.
+
+ 
+  	Gold 	Expert 	Master 	Grand Master
+Available Research Regions 	USA, ASI, EUR, GLB 	USA, ASI, EUR, GLB 	+ CHN, AMR, JPN 	+ HKG, KOR, TW
+Access to Data on the BRAIN platform 	15% of available data 	30% 	60% 	100%
+Access to Operators on the BRAIN platform 	40% of all Operators 	60% 	80% 	100%
+SuperAlpha Access (subject to 100+ Alpha submission requirement) 	Only able to use own Alphas as components to SuperAlpha 	In addition to prior level access, ability to select component Alphas of consultants from your same University 	In addition to prior level access, ability to select component Alphas of consultants from your same Country 	In addition to prior level access, ability to select component Alphas of all consultants
+Biometrics sign-in required every time
+	4 hrs 	6 hrs 	12 hrs 	24 hrs
+
+ 
+
+ How often are these levels evaluated?
+NL41370
+
+    2 days ago Updated ~1 minute read 
+
+Not yet followed by anyone
+
+WorldQuant may evaluate levels on a quarterly basis. Once you qualify for a level, you retain that level for at least 6 months (the current quarter plus a 3-month grace period).  Changes in a consultant’s levels will take effect within the first week of each calendar quarter after each re-evaluation, starting 1st Jan 2025.
+
+ How can I track my progress towards the next level?
+NL41370
+
+    3 days ago Updated ~1 minute read 
+
+Not yet followed by anyone
+
+You can view your current level and progress towards the next level on the Genius dashboard. This displays metrics, such as (i) your current signal count, (ii) number of pyramids you have formulated, and (iii) combined performance of your Alphas relative to the thresholds for the next level.
+
+ What happens if I don't meet the criteria for my current level in a given quarter?
+NL41370
+
+    2 days ago Updated ~1 minute read 
+
+Not yet followed by anyone
+
+You have a 3-month grace period where you retain the current level for which you qualified in the last quarter. If you don't meet the then-current criteria at the time of a re-evaluation to remain in that level (or move into the next higher level) after the grace period, you may be moved to a lower level.
+
+ Can I lose access to features if I move into a lower level?
+NL41370
+
+    2 days ago Updated ~1 minute read 
+
+Not yet followed by anyone
+
+Yes, if you move to a lower level, you may lose access to certain datasets, operators, and other features associated with higher levels.  Note that moving to a lower level may prevent you from re-simulating previously created alphas if they use data fields or operators you no longer have access to.
+
+
+ How can I regain a higher level after moving into a lower level?
+NL41370
+
+    2 days ago Updated ~1 minute read 
+
+Not yet followed by anyone
+
+You'll need to meet the then-current criteria for the higher level in a subsequent quarter. Focus on increasing your signal submissions, formulating more pyramids, and improving your “Combined Alpha Performance”.
+
+Moving to a lower level may prevent you from re-simulating previously created alphas if they use data fields or operators you no longer have access to.

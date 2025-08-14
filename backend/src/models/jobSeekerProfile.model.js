@@ -46,6 +46,13 @@ const jobPreferencesSchema = new Schema({
   industries: [String],
   locations: [String],
 });
+const uploadSchema = new Schema({
+  filename: String,
+  type: String, // e.g., 'resume', 'cv', 'portfolio', etc.
+  url: String,  // or 'path' if storing locally
+  uploadedAt: { type: Date, default: Date.now },
+  label: String, // optional user-provided label
+});
 const jobSeekerProfileSchema = new Schema({
   contactNumber: String,
   doneOnboarding: { type: Boolean, default: false },
@@ -63,7 +70,8 @@ const jobSeekerProfileSchema = new Schema({
     default:
       "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg",
   },
-  resume: String,
+  resume: String, // keep for backward compatibility
+  uploads: [uploadSchema], // new: array of uploaded files
   certifications: [certificationSchema],
   languages: [languageSchema],
   interests: [String],
@@ -87,3 +95,4 @@ export const JobSeekerProfile = mongoose.model(
   "JobSeekerProfile",
   jobSeekerProfileSchema
 );
+export { jobSeekerProfileSchema };

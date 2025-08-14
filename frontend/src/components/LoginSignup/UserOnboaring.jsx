@@ -6,6 +6,7 @@ import Checkbox from "../Common/FormComponents/Checkbox";
 import CompanySearch from "../Common/CompanySearch";
 import { userService } from "../../services/userService";
 import { useNavigate } from "react-router-dom";
+import countries from "../../data/countries.json";
 
 function UserOnboaring() {
   const initialFormData = {
@@ -109,20 +110,7 @@ function UserOnboaring() {
     }
   }, [formData.notEmployed]);
 
-  const locationOptions = [
-    { value: "default", label: "Select Country" },
-    { value: "india", label: "India" },
-    { value: "united_states", label: "United States" },
-    { value: "united_kingdom", label: "United Kingdom" },
-    { value: "australia", label: "Australia" },
-    { value: "canada", label: "Canada" },
-    { value: "germany", label: "Germany" },
-    { value: "france", label: "France" },
-    { value: "japan", label: "Japan" },
-    { value: "china", label: "China" },
-    { value: "brazil", label: "Brazil" },
-    { value: "south_africa", label: "South Africa" },
-  ];
+  const locationOptions = countries.map(country => ({ value: country.code, label: country.name }));
   const roleOptions = [
     {
       label: "Technical Roles",
@@ -130,6 +118,17 @@ function UserOnboaring() {
         { value: "data_scientist", label: "Data Scientist" },
         { value: "system_admin", label: "System Administrator" },
         { value: "software_engineer", label: "Software Engineer" },
+        { value: "devops_engineer", label: "DevOps Engineer" },
+        { value: "qa_engineer", label: "QA Engineer" },
+        { value: "frontend_developer", label: "Frontend Developer" },
+        { value: "backend_developer", label: "Backend Developer" },
+        { value: "fullstack_developer", label: "Full Stack Developer" },
+        { value: "mobile_developer", label: "Mobile Developer" },
+        { value: "data_engineer", label: "Data Engineer" },
+        { value: "ai_ml_engineer", label: "AI/ML Engineer" },
+        { value: "security_engineer", label: "Security Engineer" },
+        { value: "blockchain_developer", label: "Blockchain Developer" },
+        { value: "game_developer", label: "Game Developer" },
       ],
     },
     {
@@ -138,6 +137,12 @@ function UserOnboaring() {
         { value: "project_manager", label: "Project Manager" },
         { value: "product_manager", label: "Product Manager" },
         { value: "team_lead", label: "Team Lead" },
+        { value: "cto", label: "CTO" },
+        { value: "ceo", label: "CEO" },
+        { value: "coo", label: "COO" },
+        { value: "cfo", label: "CFO" },
+        { value: "hr_manager", label: "HR Manager" },
+        { value: "recruiter", label: "Recruiter" },
       ],
     },
     {
@@ -146,6 +151,23 @@ function UserOnboaring() {
         { value: "ui_designer", label: "UI Designer" },
         { value: "ux_designer", label: "UX Designer" },
         { value: "graphic_designer", label: "Graphic Designer" },
+        { value: "product_designer", label: "Product Designer" },
+        { value: "motion_designer", label: "Motion Designer" },
+        { value: "illustrator", label: "Illustrator" },
+      ],
+    },
+    {
+      label: "Other Roles",
+      options: [
+        { value: "sales", label: "Sales" },
+        { value: "marketing", label: "Marketing" },
+        { value: "customer_support", label: "Customer Support" },
+        { value: "business_analyst", label: "Business Analyst" },
+        { value: "content_writer", label: "Content Writer" },
+        { value: "legal", label: "Legal" },
+        { value: "finance", label: "Finance" },
+        { value: "operations", label: "Operations" },
+        { value: "other", label: "Other (please specify)" },
       ],
     },
   ];
@@ -161,44 +183,39 @@ function UserOnboaring() {
     { value: "6", label: "More than 5 years" },
   ];
   return (
-    <div className="mt-[3.8rem]  bg-[#ebeff5] flex flex-col items-center ">
+    <div className="mt-4 bg-[#ebeff5] flex flex-col items-center ">
       <div>
-        <div className="py-10 flex flex-col justify-center items-center gap-5">
-          <h2 className="font-semibold text-5xl text-gray-950 text-center">
+        <div className="py-6 sm:py-10 flex flex-col justify-center items-center gap-3 sm:gap-5">
+          <h2 className="font-semibold text-2xl sm:text-4xl md:text-5xl text-gray-950 text-center">
             Create your profile
           </h2>
-          <p className="text-lg text-gray-950 text-center">
-            Apply privately to thousands of tech companies & startups with one
-            profile.
+          <p className="text-base sm:text-lg text-gray-950 text-center">
+            Apply privately to thousands of tech companies & startups with one profile.
           </p>
         </div>
       </div>
-      <form className="w-11/12 md:w-5/6 lg:w-4/6" onSubmit={handleSubmission}>
-        <div className="bg-white  rounded-xl p-6 md:p-10 flex flex-col gap-6 mb-10">
+      <form className="w-full max-w-lg px-2 sm:px-6" onSubmit={handleSubmission}>
+        <div className="bg-white rounded-xl p-4 sm:p-6 md:p-10 flex flex-col gap-4 sm:gap-6 mb-6 sm:mb-10">
           <div>
             <p className="font-medium">
               <span className="text-green-500 mr-1">*</span>Where are you based?
             </p>
-            <div className="pl-3 flex flex-col gap-3">
-              <p className="text-xs mt-1 text-gray-400 hidden">
-                Tip: You can choose a city, state, or country
-              </p>
+            <div className="pl-1 sm:pl-3 flex flex-col gap-2 sm:gap-3">
               <CheckBoxLabel text={formData.location} />
               <SelectInput
                 id="location"
                 value={formData.location}
                 onChange={handleInputChange}
                 options={locationOptions}
-                className={"w-full md:w-1/2"}
+                className={"w-full"}
               />
             </div>
           </div>
           <div>
             <p className="font-medium">
-              <span className="text-green-500 mr-1">*</span>What best describes
-              your current role?
+              <span className="text-green-500 mr-1">*</span>What best describes your current role?
             </p>
-            <div className="pl-3 flex flex-col gap-2">
+            <div className="pl-1 sm:pl-3 flex flex-col gap-1 sm:gap-2">
               <CheckBoxLabel text={formData.primaryRole} />
               <SelectInput
                 id="primaryRole"
@@ -206,16 +223,26 @@ function UserOnboaring() {
                 onChange={handleInputChange}
                 options={roleOptions}
                 optgroup={true}
-                className={"w-full md:w-1/2"}
+                className={"w-full"}
               />
+              {formData.primaryRole === "other" && (
+                <InputField
+                  id="customRole"
+                  label="Please specify your role"
+                  value={formData.customRole || ""}
+                  onChange={e => setFormData(prev => ({ ...prev, customRole: e.target.value, primaryRole: e.target.value }))}
+                  placeholder="Enter your role"
+                  className={"w-full mt-2"}
+                  isRequired={true}
+                />
+              )}
             </div>
           </div>
           <div>
             <p className="font-medium">
-              <span className="text-green-500 mr-1">*</span>How many years of
-              experience do you have in your current role?
+              <span className="text-green-500 mr-1">*</span>How many years of experience do you have in your current role?
             </p>
-            <div className="pl-3 flex flex-col gap-2">
+            <div className="pl-1 sm:pl-3 flex flex-col gap-1 sm:gap-2">
               <CheckBoxLabel
                 text={
                   formData.yearsOfExperience &&
@@ -227,16 +254,15 @@ function UserOnboaring() {
                 value={formData.yearsOfExperience}
                 onChange={handleInputChange}
                 options={experienceOptions}
-                className={"w-full md:w-1/2"}
+                className={"w-full"}
               />
             </div>
           </div>
           <div>
             <p className="font-medium">
-              <span className="text-green-500 mr-1">*</span>Where do you
-              currently work?
+              <span className="text-green-500 mr-1">*</span>Where do you currently work?
             </p>
-            <div className="pl-3 flex flex-col gap-2">
+            <div className="pl-1 sm:pl-3 flex flex-col gap-1.5 ">
               <p className="text-xs mt-1 text-gray-400">
                 Your company will never see that you're looking for a job
               </p>
@@ -250,14 +276,13 @@ function UserOnboaring() {
                     value={formData.title}
                     isRequired={!formData.notEmployed}
                     placeholder="SDE 1"
-                    className={"w-full md:w-1/2"}
+                    className={"w-full"}
                   />
-
                   <div>
                     <div className={showDropdown ? "" : "hidden"}>
                       <CompanySearch
                         handleDropdown={handleDropdown}
-                        width={"w-full md:w-1/2"}
+                        width={"w-full"}
                       />
                     </div>
                     <div className={!showDropdown ? "" : "hidden"}>
@@ -296,14 +321,14 @@ function UserOnboaring() {
               </div>
             </div>
           </div>
-          <div className="bg-gray-100 p-5 md:p-16 flex flex-col gap-10">
+          <div className="bg-gray-100 p-3 sm:p-5 md:p-16 flex flex-col gap-6 sm:gap-10">
             <InputField
               label="Linkedin Profile"
               id="linkedin"
               value={formData.linkedin}
               onChange={handleInputChange}
               placeholder={"https://www.linkedin.com/in/username"}
-              className={"w-full md:w-1/2 flex flex-col gap-3"}
+              className={"w-full flex flex-col gap-3"}
             />
             <InputField
               label="Your Website"
@@ -311,12 +336,12 @@ function UserOnboaring() {
               value={formData.website}
               onChange={handleInputChange}
               placeholder={"https://mypersonalwebsite.com"}
-              className={"w-full md:w-1/2 flex flex-col gap-3"}
+              className={"w-full flex flex-col gap-3"}
             />
           </div>
           <button
             type="submit"
-            className="flex justify-center items-center bg-green-500 hover:bg-green-600  text-white font-medium  rounded-3xl w-48 py-2 px-3.5"
+            className="flex justify-center items-center bg-green-500 hover:bg-green-600 text-white font-medium rounded-3xl w-full py-2 px-3.5 mt-2"
           >
             Create your profile
           </button>

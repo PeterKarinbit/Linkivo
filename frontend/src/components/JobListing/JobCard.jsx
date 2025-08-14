@@ -1,22 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import Dot from "../Dot";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-function JobCard({ job, redirectToDetail }) {
-  const {
-    title,
-    salaryRange,
-    location,
-    type,
-    responsibilities,
-    employer,
-    _id,
-  } = job;
-  const { companyLogo, companyName } = employer.userProfile;
+// Modern, accessible palette of 10 distinct colors
+const CARD_COLORS = [
+  "bg-blue-100 dark:bg-blue-900",
+  "bg-green-100 dark:bg-green-900",
+  "bg-yellow-100 dark:bg-yellow-900",
+  "bg-pink-100 dark:bg-pink-900",
+  "bg-purple-100 dark:bg-purple-900",
+  "bg-orange-100 dark:bg-orange-900",
+  "bg-teal-100 dark:bg-teal-900",
+  "bg-red-100 dark:bg-red-900",
+  "bg-indigo-100 dark:bg-indigo-900",
+  "bg-cyan-100 dark:bg-cyan-900",
+];
 
-  const datePosted = new Date(job.datePosted);
+function JobCard({ job, redirectToDetail, index, colorIndex }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isAdzuna = job.adzuna_url || job.redirect_url;
+  const title = job.title || job.job_title || "Untitled";
+  const companyName = job.employer?.userProfile?.companyName || job.company?.display_name || (job.company && job.company.display_name) || (job.company && job.company.name) || job.company || "Unknown Company";
+  const companyLogo = job.employer?.userProfile?.companyLogo || job.company_logo || "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg";
+  const location = job.location?.display_name || job.location || "Unknown Location";
+  const type = job.type || job.contract_type || job.contract_time || "Other";
+  const salaryFrom = job.salaryRange?.from || job.salary_min || "-";
+  const salaryTo = job.salaryRange?.to || job.salary_max || "-";
+  const datePosted = new Date(job.datePosted || job.created || job.created_at || Date.now());
+  const responsibilities = job.responsibilities || job.description?.split(". ").slice(0, 2) || [job.description || "", ""];
+  const _id = job._id || job.id || job.job_id || job.redirect_url || job.adzuna_url || Math.random();
 
   const now = new Date();
-
   const diffTime = Math.abs(now - datePosted);
   const diffMinutes = Math.floor(diffTime / (1000 * 60));
   const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
@@ -24,7 +38,6 @@ function JobCard({ job, redirectToDetail }) {
   const diffMonths = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 30));
 
   let timeAgo;
-
   if (diffMinutes < 60) {
     timeAgo = diffMinutes + " minutes ago";
   } else if (diffHours < 24) {
@@ -58,12 +71,21 @@ function JobCard({ job, redirectToDetail }) {
       bgColor = "bg-gray-200";
   }
 
+  // Use colorIndex to select card color
+  const cardBg = CARD_COLORS[colorIndex % CARD_COLORS.length];
+
+  // Description logic
+  const description = Array.isArray(responsibilities)
+    ? responsibilities.filter(Boolean).join(". ")
+    : responsibilities || "";
+  const preview = description.length > 120 ? description.slice(0, 120) + "..." : description;
+
   return (
     <div
-      className="my-4 hover:cursor-pointer"
-      onClick={() => redirectToDetail(_id)}
+      className={`my-4 hover:cursor-pointer`}
+      // Remove onClick from the card itself to avoid accidental navigation
     >
-      <div className="border p-3.5 shadow rounded-lg">
+      <div className={`border p-3.5 shadow rounded-lg ${cardBg}`}>
         {/* Top */}
         <div className="mb-2 md:mb-5 flex flex-col md:flex-row justify-between gap-5 md:gap-1">
           {/* right */}
@@ -73,7 +95,16 @@ function JobCard({ job, redirectToDetail }) {
             </div>
             <div className="flex flex-col mb-2 md:mb-0">
               <div className="title">
-                <p className="font-bold">{title}</p>
+                <a
+                  href={isAdzuna ? (job.redirect_url || job.adzuna_url) : (job.application_url || '#')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-blue-700 dark:text-blue-300 hover:underline focus:underline"
+                  title="View job posting"
+                  onClick={e => e.stopPropagation()}
+                >
+                  {title}
+                </a>
               </div>
               <div className="flex flex-col md:flex-row gap-2 text-[.9rem] mt-1">
                 <div className="company">
@@ -84,7 +115,6 @@ function JobCard({ job, redirectToDetail }) {
                 <div className="hidden md:flex justify-center items-center">
                   <Dot />
                 </div>
-
                 <div className="flex gap-3 items-center  md:flex-row text-xs md:text-sm">
                   <div className={`tag py-px px-2.5 rounded-xl ${bgColor}`}>
                     <span className={color}>{type}</span>
@@ -92,7 +122,7 @@ function JobCard({ job, redirectToDetail }) {
                   <Dot />
                   <div className="strippend">
                     <span className="text-gray-400">
-                      ₹ {salaryRange.from}-₹ {salaryRange.to} INR
+                      {salaryFrom !== "-" && salaryTo !== "-" ? `₹ ${salaryFrom}-₹ ${salaryTo} INR` : "Salary not disclosed"}
                     </span>
                   </div>
                 </div>
@@ -106,18 +136,28 @@ function JobCard({ job, redirectToDetail }) {
                 <i className="fa-solid fa-location-dot"></i>
                 <p className="font-medium">{location}</p>
               </div>
-              <div className="text-gray-500">
-                <p>{timeAgo}</p>
+              <div className="text-gray-500" title={`Posted ${timeAgo}`}>
+                <p>Posted {timeAgo}</p>
               </div>
             </div>
           </div>
         </div>
-        {/* Bottom */}
-        <div className="ml-5 md:ml-10 text-gray-500 text-[.9rem]">
-          <ul className="list-disc">
-            <li>{responsibilities[0]}</li>
-            <li>{responsibilities[1]}</li>
-          </ul>
+        {/* Description Dropdown */}
+        <div className="mt-2">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-gray-700 dark:text-gray-200">Description:</span>
+            <button
+              className="text-blue-600 dark:text-blue-400 flex items-center gap-1 text-xs font-medium focus:outline-none"
+              onClick={e => { e.stopPropagation(); setIsExpanded(v => !v); }}
+              tabIndex={0}
+            >
+              {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
+              {isExpanded ? "Show Less" : "Show More"}
+            </button>
+          </div>
+          <div className="mt-1 text-gray-600 dark:text-gray-300 text-sm">
+            {isExpanded ? description : preview}
+          </div>
         </div>
       </div>
     </div>

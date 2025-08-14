@@ -10,11 +10,7 @@ function UserProfile() {
   if (userData.role === "employer") {
     return <Navigate to="/" />;
   }
-  const [selectedSection, setSelectedSection] = useState("editProfile");
-
-  const switchSection = (section) => {
-    setSelectedSection(section);
-  };
+  // Only show profile editing, remove resume section
 
   const navigate = useNavigate();
 
@@ -23,46 +19,29 @@ function UserProfile() {
   };
 
   return (
-    <div className="mt-20 xl:px-28 px-5">
+    <div className="mt-20 xl:px-28 px-5 bg-gradient-to-br from-green-100 via-blue-50 to-blue-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
       <div>
         <div>
-          <h2 className="font-medium text-4xl">Edit your JobHunter profile</h2>
+          <h2 className="font-medium text-4xl mb-6 text-gray-900 dark:text-gray-100">Edit your Linkivo profile</h2>
         </div>
-        <div className="flex flex-col md:flex-row md:justify-between border-b mt-10 md:items-center pb-3 md:pb-0">
+        <div className="flex flex-col md:flex-row md:justify-between border-b border-gray-300 dark:border-gray-700 mt-10 md:items-center pb-3 md:pb-0">
           <div className="flex gap-6 mb-3 md:mb-0 ">
             <div
-              className={`hover:cursor-pointer text-gray-600 ${
-                selectedSection === "editProfile"
-                  ? "text-black border-b-2 border-gray-600"
-                  : "hover:border-b-2 hover:border-gray-300"
-              } pb-3 hover:text-green-500`}
-              onClick={() => switchSection("editProfile")}
+              className="text-black dark:text-white border-b-2 border-gray-600 dark:border-gray-200 text-lg font-semibold pb-3 hover:text-green-500"
             >
               Profile
             </div>
-            <div
-              className={`hover:cursor-pointer text-gray-600 ${
-                selectedSection === "resume"
-                  ? "text-black border-b-2 border-gray-600"
-                  : "hover:border-b-2 hover:border-gray-300"
-              } pb-3 hover:text-green-500`}
-              onClick={() => switchSection("resume")}
-            >
-              Resume / CV
-            </div>
           </div>
-
           <div
-            className="text-sm font-medium text-green-500 hover:cursor-pointer"
+            className="text-sm font-medium text-green-600 hover:underline hover:cursor-pointer"
             onClick={openPublicProfile}
           >
             View public profile
           </div>
         </div>
       </div>
-      <div className="border my-5 ">
-        {selectedSection === "editProfile" && <EditProfile />}
-        {selectedSection === "resume" && <UpdateResume />}
+      <div className="my-5 bg-white dark:bg-gray-800 rounded-xl dark:text-gray-100 shadow-lg p-6">
+        <EditProfile />
       </div>
     </div>
   );

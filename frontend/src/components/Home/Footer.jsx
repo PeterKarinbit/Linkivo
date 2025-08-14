@@ -12,7 +12,7 @@ function Footer() {
               className="w-10 rounded-lg mr-3"
               alt="JobHunter Logo"
             />
-            / JobHunter
+            / Linkivo
           </p>
         </div>
         <div className=" flex gap-3 text-2xl ml-3.5 text-gray-800">

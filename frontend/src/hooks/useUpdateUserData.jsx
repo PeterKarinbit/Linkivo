@@ -11,23 +11,27 @@ const useUpdateUserData = () => {
   const updateUserData = async () => {
     setLoading(true);
     try {
-      const userData = await userService.getCurrentUser();
-      if (userData) {
+      const userResponse = await userService.getCurrentUser();
+      console.log('[useUpdateUserData] getCurrentUser response:', userResponse);
+      
+      // Extract user data from response
+      const userData = userResponse.data || userResponse;
+      console.log('[useUpdateUserData] Extracted userData:', userData);
+      
+      if (userData && userData.role) {
         dispatch(login({ userData }));
       } else {
         dispatch(logout());
       }
       dispatch(setLoadingFalse());
     } catch (error) {
-      console.log(error);
+      console.error('[useUpdateUserData] Error:', error);
+      dispatch(logout());
+      dispatch(setLoadingFalse());
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    updateUserData();
-  }, []);
 
   return updateUserData;
 };

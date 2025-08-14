@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { JobSeekerProfile } from "./jobSeekerProfile.model.js";
+import { jobSeekerProfileSchema } from "./jobSeekerProfile.model.js";
 import { CompanyProfile } from "./companyProfile.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -10,21 +10,16 @@ const userSchema = new Schema(
     email: { type: String, required: true, unique: true },
     role: { type: String, required: true },
     refreshToken: String,
-    userProfile: { type: Schema.Types.Mixed },
+    userProfile: jobSeekerProfileSchema,
+    subscription: {
+      type: Schema.Types.ObjectId,
+      ref: "Subscription",
+    },
   },
   {
     timestamps: true,
   }
 );
-
-userSchema.pre("save", function (next) {
-  if (this.role === "jobSeeker") {
-    this.userProfile = new JobSeekerProfile(this.userProfile);
-  } else if (this.role === "employer") {
-    this.userProfile = new CompanyProfile(this.userProfile);
-  }
-  next();
-});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -47,7 +42,7 @@ userSchema.methods.generateAccessToken = function () {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '6h', // Default to 6 hours
     }
   );
 };
@@ -58,7 +53,7 @@ userSchema.methods.generateRefreshToken = function () {
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY || '6h', // Default to 6 hours
     }
   );
 };

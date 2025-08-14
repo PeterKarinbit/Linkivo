@@ -5,6 +5,8 @@ import SubmissionButton from "../Common/Buttons/SubmissionButton";
 import CompanySearch from "../Common/CompanySearch";
 import { userService } from "../../services/userService";
 import { useNavigate } from "react-router-dom";
+import countries from "../../data/countries.json";
+import SelectInput from "../Common/FormComponents/SelectInput";
 
 function CompanyOnboarding() {
   const [companyProfile, setCompanyProfile] = useState({
@@ -162,12 +164,13 @@ function CompanyOnboarding() {
               onChange={handleChange}
               placeholder="Enter state"
             />
-            <InputField
+            <SelectInput
               label="Country"
               id="address.country"
               value={companyProfile.address.country}
               onChange={handleChange}
-              placeholder="Enter country"
+              options={countries.map(country => ({ value: country.code, label: country.name }))}
+              className={"w-full"}
             />
           </div>
         </div>

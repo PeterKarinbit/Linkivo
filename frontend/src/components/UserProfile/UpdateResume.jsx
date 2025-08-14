@@ -4,11 +4,22 @@ import SubmissionButton from "../Common/Buttons/SubmissionButton";
 import { userService } from "../../services/userService";
 import { useSelector } from "react-redux";
 import useUpdateUserData from "../../hooks/useUpdateUserData";
+import { Link } from "react-router-dom";
 
 function UpdateResume() {
   const [resumeLink, setResumeLink] = useState("");
   const [resume, setResume] = useState("");
+  const [resumeFile, setResumeFile] = useState(null);
+  const [resumeType, setResumeType] = useState("Resume");
+  const [linkedIn, setLinkedIn] = useState("");
+  const [portfolio, setPortfolio] = useState("");
+  const [visibility, setVisibility] = useState("recruiters");
   const [updating, setUpdating] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [feedback, setFeedback] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [similarity, setSimilarity] = useState(null);
+  const [extractedText, setExtractedText] = useState("");
 
   const updateUserData = useUpdateUserData();
 
@@ -17,70 +28,70 @@ function UpdateResume() {
   useEffect(() => {
     if (userData?.userProfile?.resume) {
       setResume(userData?.userProfile?.resume);
+      setLastUpdated(userData?.userProfile?.resumeLastUpdated || new Date().toLocaleDateString());
     }
+    if (userData?.userProfile?.linkedIn) setLinkedIn(userData.userProfile.linkedIn);
+    if (userData?.userProfile?.portfolio) setPortfolio(userData.userProfile.portfolio);
+    if (userData?.userProfile?.resumeType) setResumeType(userData.userProfile.resumeType);
+    if (userData?.userProfile?.resumeVisibility) setVisibility(userData.userProfile.resumeVisibility);
   }, [userData]);
 
-  const handleInputChange = (event) => {
-    setResumeLink(event.target.value);
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setResumeFile(e.target.files[0]);
+    }
+  };
+
+  const handleDelete = () => {
+    setResume("");
+    setResumeLink("");
+    setResumeFile(null);
+    setFeedback("Resume removed. Remember to save changes.");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setUpdating(true);
+    setFeedback("");
+    setSimilarity(null);
+    setExtractedText("");
     try {
-      setUpdating(true);
-      const res = await userService.updateResume(resumeLink);
-      updateUserData();
-      setUpdating(false);
+      if (resumeFile && jobDescription) {
+        // Call AI analysis API
+        const response = await userService.analyzeDocument(resumeFile, jobDescription);
+        if (response?.data) {
+          setSimilarity(response.data.similarity);
+          setExtractedText(response.data.docText);
+          setFeedback("Document analyzed and uploaded successfully!");
+        } else {
+          setFeedback("Upload succeeded, but no analysis result returned.");
+        }
+      } else {
+        setFeedback("Please select a file and enter a job description for analysis.");
+      }
     } catch (error) {
-      console.log(error);
-      setUpdating(false);
+      setFeedback("Error uploading or analyzing document: " + (error?.message || "Unknown error"));
     }
-    setResumeLink("");
+    setUpdating(false);
+    setLastUpdated(new Date().toLocaleDateString());
+    updateUserData();
   };
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 py-10 sm:px-5 md:px-10 lg:px-20">
       <div className="w-full max-w-2xl p-6 bg-white rounded shadow-md">
         <h2 className="mb-5 text-lg sm:text-xl md:text-2xl font-bold text-gray-700">
-          Upload your recent resume or CV
+          Resume / CV Upload Moved
         </h2>
-
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <InputField
-            label="Resume link"
-            id="resumeLink"
-            value={resumeLink}
-            onChange={handleInputChange}
-            isRequired={true}
-            placeholder="Paste your Google Drive link here"
-            description="Please ensure that your Google Drive link is accessible to everyone."
-          />
-
-          <div className="flex justify-end my-2">
-            <SubmissionButton
-              type="submit"
-              label={updating ? "Updating..." : "Update"}
-              color="black"
-            />
-          </div>
-        </form>
-
-        {resume && (
-          <div className="mt-10 p-3 bg-gray-200 rounded shadow-md">
-            <h3 className="text-lg font-bold text-gray-700">
-              Current Resume Link:
-            </h3>
-            <a
-              href={resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green-600 underline flex items-center my-2 break-all"
-            >
-              <i className="fa-solid fa-arrow-up-right-from-square mr-2.5"></i>
-              {resume}
-            </a>
-          </div>
-        )}
+        <div className="text-gray-700 mb-6">
+          The upload and AI analysis of your resume, CV, or portfolio has moved to a dedicated page for a better experience.<br />
+          Please use the <b>Upload</b> page to upload and analyze your documents.
+        </div>
+        <Link to="/upload">
+          <button className="bg-black text-white px-6 py-2 rounded shadow hover:bg-gray-800">
+            Go to Upload Page
+          </button>
+        </Link>
       </div>
     </div>
   );

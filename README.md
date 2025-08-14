@@ -1,4 +1,4 @@
-# JobHunter
+# Linkivo
 AI powered Employment Platform
 
 ## Prerequisites
@@ -12,13 +12,13 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/TENSHKUMAR-KKT-2004/JobHunter
+git clone https://github.com/TENSHKUMAR-KKT-2004/Linkivo
 ```
 
 ### 2. Navigate into the Project Directory
 
 ```bash
-cd JobHunter
+cd Linkivo
 ```
 
 ### 3. Setting Up the Frontend
@@ -75,7 +75,7 @@ CLERK_SECRET_KEY=sk_test_Ufgb9zpxVrFKUyJJUUNW9LLxingK0zuU9G1O9QZWbM
 NEXT_PUBLIC_GEMINI_API_KEY=AIzaSyDUWch15btYySciiu4i4tQpDKV_kIFJFKE
 ```
 
-#### For JobHunter
+#### For Linkivo
 
 ##### backend
 

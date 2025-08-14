@@ -13,7 +13,7 @@ function CompanyDashboard() {
     return <Navigate to="/" />;
   }
   return (
-    <div className="flex">
+    <div className="flex bg-gray-50 dark:bg-gray-900 min-h-screen">
       <aside className="max-w-[64px] xl:w-full xl:max-w-[280px]">
         <DashboardSidebar />
       </aside>

@@ -51,10 +51,12 @@ function DashboardSidebar() {
       .logout()
       .then(() => {
         dispatch(logout());
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
-        console.log(error);
+        // Fallback: clear state and redirect even if API fails (e.g., token expired)
+        dispatch(logout());
+        navigate("/login");
       });
   };
 

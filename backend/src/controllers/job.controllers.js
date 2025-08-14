@@ -6,6 +6,12 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { JSDOM } from "jsdom";
 import createDOMPurify from "dompurify";
+import { execFile } from "child_process";
+import path from "path";
+import fetch from "node-fetch";
+import { recommendJobs } from "../utils/ai/jobRecommendation.service.js";
+import { extractSalary, extractSkills } from "../utils/ai/extractSalaryAndSkills.service.js";
+import { batchRecommendJobs } from "../utils/ai/batchAnalysis.service.js";
 
 const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window);
@@ -373,17 +379,152 @@ const removeSavedJob = asyncHandler(async (req, res) => {
     );
 });
 
+const recommendJobsHandler = asyncHandler(async (req, res) => {
+  const { userProfile, jobs } = req.body;
+  if (!userProfile || !jobs || !Array.isArray(jobs)) {
+    return res.status(400).json({ error: "userProfile and jobs array are required" });
+  }
+  const rankedJobs = await recommendJobs(userProfile, jobs);
+  return res.status(200).json({ jobs: rankedJobs });
+});
+
+const batchRecommendJobsHandler = asyncHandler(async (req, res) => {
+  const { userProfiles, jobs } = req.body;
+  if (!Array.isArray(userProfiles) || !Array.isArray(jobs)) {
+    return res.status(400).json({ error: "userProfiles and jobs arrays are required" });
+  }
+  const results = await batchRecommendJobs(userProfiles, jobs);
+  return res.status(200).json({ results });
+});
+
+export const scrapeLinkedInJobs = asyncHandler(async (req, res) => {
+  const pythonScript = path.join(
+    process.cwd(),
+    "backend",
+    "jobhunter_python",
+    "main.py"
+  );
+
+  execFile(
+    "python",
+    [pythonScript],
+    { timeout: 60000 },
+    (error, stdout, stderr) => {
+      if (error) {
+        return res.status(500).json({ error: error.message, stderr });
+      }
+      try {
+        // Try to parse output as JSON, fallback to raw output
+        const data = JSON.parse(stdout);
+        res.status(200).json({ jobs: data });
+      } catch (e) {
+        res.status(200).json({ output: stdout });
+      }
+    }
+  );
+});
+
+export const getExchangeRates = asyncHandler(async (req, res) => {
+  const apiKey = process.env.EXCHANGE_RATES_API_KEY;
+  const { base = "INR", symbols = "USD,EUR,GBP,JPY,AUD,CAD,INR,CNY,SGD,ZAR" } = req.query;
+  const url = `https://api.apilayer.com/exchangerates_data/latest?base=${base}&symbols=${symbols}`;
+  console.log("[ExchangeRates] Requesting:", url);
+  console.log("[ExchangeRates] Using API Key:", apiKey ? "SET" : "NOT SET");
+  const response = await fetch(url, {
+    headers: { apikey: apiKey },
+  });
+  const data = await response.json();
+  console.log("[ExchangeRates] API Response:", data);
+  if (data && data.rates) {
+    res.status(200).json({ rates: data.rates });
+  } else {
+    res.status(500).json({ error: "Failed to fetch exchange rates", details: data });
+  }
+});
+
+export const jsearchJobSearchHandler = asyncHandler(async (req, res) => {
+  const apiKey = process.env.RAPIDAPI_KEY;
+  const query = req.query.query || "developer";
+  const page = req.query.page || 1;
+  const country = req.query.country || "us";
+  const url = `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(query)}&page=${page}&country=${country}`;
+  const response = await fetch(url, {
+    headers: {
+      "X-RapidAPI-Key": apiKey,
+      "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
+    },
+  });
+  const data = await response.json();
+  if (data) {
+    res.status(200).json(data);
+  } else {
+    res.status(500).json({ error: "Failed to fetch jobs from JSearch" });
+  }
+});
+
+export const adzunaJobSearch = asyncHandler(async (req, res) => {
+  const appId = process.env.ADZUNA_APP_ID;
+  const appKey = process.env.ADZUNA_APP_KEY;
+  console.log('[Adzuna] APP_ID:', appId);
+  console.log('[Adzuna] APP_KEY:', appKey);
+  const {
+    what = "",
+    where = "",
+    page = 1,
+    country,
+    salary_min,
+    salary_max,
+    full_time,
+    permanent,
+    results_per_page,
+    sort_by
+  } = req.query;
+  const countryCode = country || 'gb';
+  let url = `https://api.adzuna.com/v1/api/jobs/${countryCode}/search/${page}?app_id=${appId}&app_key=${appKey}&what=${encodeURIComponent(what)}&where=${encodeURIComponent(where)}`;
+  if (salary_min) url += `&salary_min=${salary_min}`;
+  if (salary_max) url += `&salary_max=${salary_max}`;
+  if (full_time) url += `&full_time=${full_time}`;
+  if (permanent) url += `&permanent=${permanent}`;
+  if (results_per_page) url += `&results_per_page=${results_per_page}`;
+  if (sort_by) url += `&sort_by=${sort_by}`;
+  url += `&content-type=application/json`;
+  console.log('[Adzuna] Request URL:', url);
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log('[Adzuna] Response:', JSON.stringify(data).slice(0, 500));
+    res.status(200).json(data);
+  } catch (error) {
+    console.log('[Adzuna] Error:', error);
+    res.status(500).json({ error: "Failed to fetch jobs from Adzuna", details: error.message });
+  }
+});
+
+export const extractSalaryAndSkillsHandler = asyncHandler(async (req, res) => {
+  const { text } = req.body;
+  if (!text) {
+    return res.status(400).json({ error: "Text is required" });
+  }
+  const salary = extractSalary(text);
+  const skills = extractSkills(text);
+  return res.status(200).json({ salary, skills });
+});
+
 export {
-  ping,
-  authPing,
-  getJobs,
-  getJobById,
-  postJob,
-  sendJobDescription,
-  applyForJob,
-  saveJob,
-  getJobLocations,
-  getCompanies,
-  getSavedJobs,
-  removeSavedJob,
+  ping as Ping,
+  authPing as AuthPing,
+  getJobs as GetJobs,
+  getJobById as GetJobById,
+  postJob as PostJob,
+  sendJobDescription as SendJobDescription,
+  applyForJob as ApplyForJob,
+  saveJob as SaveJob,
+  removeSavedJob as RemoveSavedJob,
+  getJobLocations as GetJobLocations,
+  getCompanies as GetCompanies,
+  scrapeLinkedInJobs as ScrapeLinkedInJobs,
+  getExchangeRates as ExchangeRates,
+  jsearchJobSearchHandler as JobSearchHandler,
+  recommendJobsHandler as RecommendJobsHandler,
+  batchRecommendJobsHandler as BatchRecommendJobsHandler,
 };

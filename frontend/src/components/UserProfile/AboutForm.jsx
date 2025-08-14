@@ -4,14 +4,15 @@ import InputField from "../Common/FormComponents/InputField.jsx";
 import SelectInput from "../Common/FormComponents/SelectInput.jsx";
 import SubmissionButton from "../Common/Buttons/SubmissionButton.jsx";
 import useUpdateUserData from "../../hooks/useUpdateUserData.jsx";
+import countries from "../../data/countries.json";
 function AboutForm({ userData }) {
   const initialFormData = {
-    name: userData?.userProfile.name,
-    location: userData?.userProfile.location,
-    primaryRole: userData?.userProfile.primaryRole,
-    yearsOfExperience: userData?.userProfile.yearsOfExperience,
-    bio: userData?.userProfile.bio,
-    profilePicture: userData?.userProfile.profilePicture,
+    name: userData?.userProfile?.name || "",
+    location: userData?.userProfile?.location || "",
+    primaryRole: userData?.userProfile?.primaryRole || "",
+    yearsOfExperience: userData?.userProfile?.yearsOfExperience || "",
+    bio: userData?.userProfile?.bio || "",
+    profilePicture: userData?.userProfile?.profilePicture || "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -21,15 +22,15 @@ function AboutForm({ userData }) {
 
   const updateUserData = useUpdateUserData();
   useEffect(() => {
-    if (userData) {
+    if (userData && userData.userProfile) {
       setFormData({
         ...formData,
-        name: userData.userProfile.name,
-        location: userData.userProfile.location,
-        primaryRole: userData.userProfile.primaryRole,
-        yearsOfExperience: userData.userProfile.yearsOfExperience,
-        bio: userData.userProfile.bio,
-        profilePicture: userData.userProfile.profilePicture,
+        name: userData.userProfile.name || "",
+        location: userData.userProfile.location || "",
+        primaryRole: userData.userProfile.primaryRole || "",
+        yearsOfExperience: userData.userProfile.yearsOfExperience || "",
+        bio: userData.userProfile.bio || "",
+        profilePicture: userData.userProfile.profilePicture || "",
       });
     }
   }, [userData]);
@@ -72,9 +73,14 @@ function AboutForm({ userData }) {
     e.preventDefault();
     try {
       setUpdating(true);
-      const res = await userService.updateUserProfile(formData);
+      // Remove customRole from payload before sending
+      let payload = { ...formData };
+      delete payload.customRole;
+      console.log("Submitting payload to backend:", payload);
+      const res = await userService.updateUserProfile(payload);
       if (res.status === 200) {
         setIsChanged(false);
+        updateUserData();
       }
       setUpdating(false);
     } catch (error) {
@@ -87,20 +93,7 @@ function AboutForm({ userData }) {
     setFormData(initialFormData);
   };
 
-  const locationOptions = [
-    { value: "default", label: "Select Country" },
-    { value: "india", label: "India" },
-    { value: "united_states", label: "United States" },
-    { value: "united_kingdom", label: "United Kingdom" },
-    { value: "australia", label: "Australia" },
-    { value: "canada", label: "Canada" },
-    { value: "germany", label: "Germany" },
-    { value: "france", label: "France" },
-    { value: "japan", label: "Japan" },
-    { value: "china", label: "China" },
-    { value: "brazil", label: "Brazil" },
-    { value: "south_africa", label: "South Africa" },
-  ];
+  const locationOptions = countries.map(country => ({ value: country.code, label: country.name }));
 
   const roleOptions = [
     {
@@ -142,13 +135,7 @@ function AboutForm({ userData }) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <InputField
-          label="Your Name"
-          id="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          isRequired={true}
-        />
+        {/* Profile Picture Upload First */}
         <div className="py-5 flex gap-5 items-center">
           <div className="rounded-full h-[4.5rem] w-[4.5rem] overflow-hidden border">
             <img src={formData.profilePicture} alt="User" />
@@ -170,6 +157,13 @@ function AboutForm({ userData }) {
             </button>
           </div>
         </div>
+        <InputField
+          label="Your Name"
+          id="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          isRequired={true}
+        />
         <SelectInput
           label="Where are you based?"
           id="location"
@@ -185,10 +179,20 @@ function AboutForm({ userData }) {
               id="primaryRole"
               value={formData.primaryRole}
               onChange={handleInputChange}
-              options={roleOptions}
+              options={[...roleOptions, { label: "Other", options: [{ value: "other", label: "Other" }] }]}
               isRequired={true}
               optgroup={true}
             />
+            {/* If 'Other' is selected, show a text input for custom role */}
+            {formData.primaryRole === "other" && (
+              <InputField
+                label="Custom Role"
+                id="customRole"
+                value={formData.customRole || ""}
+                onChange={e => setFormData({ ...formData, customRole: e.target.value })}
+                isRequired={true}
+              />
+            )}
           </div>
           <div className="w-full md:w-2/5 pr-2">
             <SelectInput
@@ -216,22 +220,22 @@ function AboutForm({ userData }) {
             className="w-full p-2 rounded-lg border border-gray-400 my-2"
           ></textarea>
         </div>
-        {isChanged && (
-          <div className="flex gap-6 my-4 justify-end">
-            <SubmissionButton
-              type="button"
-              onClick={handleCancel}
-              color="white"
-              label="Cancel"
-            />
-            <SubmissionButton
-              type="submit"
-              onClick={handleSubmit}
-              color="black"
-              label={updating ? "Saving..." : "Save"}
-            />
-          </div>
-        )}
+        {/* Save and Cancel buttons always at the bottom */}
+        <div className="flex gap-6 my-8 justify-end">
+          <SubmissionButton
+            type="button"
+            onClick={handleCancel}
+            color="white"
+            label="Cancel"
+          />
+          <SubmissionButton
+            type="submit"
+            onClick={handleSubmit}
+            color="black"
+            label={updating ? "Saving..." : "Save"}
+            disabled={!isChanged}
+          />
+        </div>
       </form>
     </div>
   );
