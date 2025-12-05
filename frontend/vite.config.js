@@ -1,9 +1,5 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { webcrypto } from "node:crypto"; // ✅ Import Node's webcrypto
-
-// ✅ Attach Web Crypto API to global scope so Vite deps can use it
-globalThis.crypto = webcrypto;
 
 // https://vitejs.dev/config/
 export default defineConfig({
