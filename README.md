@@ -63,31 +63,6 @@ npm run dev
 
 The backend will start running at http://localhost:3000
 
-### 4. Configure environment variables:
 
-Create a `.env` file in the `backend` directory with the `.env.sample` contents
-
-#### For mock interview app
-
-```bash
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_c3Rhci1tYW1tb3RoLTE0LmNsZXJrLmFjY291bnRzLmRldiQ
-CLERK_SECRET_KEY=sk_test_Ufgb9zpxVrFKUyJJUUNW9LLxingK0zuU9G1O9QZWbM
-NEXT_PUBLIC_GEMINI_API_KEY=AIzaSyDUWch15btYySciiu4i4tQpDKV_kIFJFKE
-```
-
-#### For Linkivo
-
-##### backend
-
-```bash
-PORT=3000
-MONGODB_URL=mongodb+srv://linkivoai_db_user:Karin%406397@linkivo.3kj02jj.mongodb.net/
-ACCESS_TOKEN_SECRET=3ba96ae11cb5c73c1312bf608d6604e7477cae33687f862a09a46deb0705c6e7
-ACCESS_TOKEN_EXPIRY=1d
-REFRESH_TOKEN_SECRET=71ff56fc082eeb9ef3c56c812d2919f4bf90cae24cbbb3421b6c5bfc81eba04c
-REFRESH_TOKEN_EXPIRY=10d
-
-OPENAI_API_KEY=your_openai_api_key
-```
 
 
