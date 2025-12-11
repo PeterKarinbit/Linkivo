@@ -19,6 +19,7 @@ router.use(verifyJWT);
 
 // Get user's subscription status
 router.get("/status", getSubscriptionStatus);
+router.get("/me", getSubscriptionStatus);
 
 // Get feature usage
 router.get("/usage", getFeatureUsage);

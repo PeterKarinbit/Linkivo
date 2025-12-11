@@ -15,8 +15,8 @@ const educationSchema = new Schema({
   institution: String,
   degree: String,
   fieldOfStudy: String,
-  startYear: Number,
-  endYear: Number,
+  startYear: String,
+  endYear: String,
 });
 const workExperienceSchema = new Schema({
   jobTitle: String,
@@ -24,8 +24,6 @@ const workExperienceSchema = new Schema({
     name: String,
     logoUrl: {
       type: String,
-      default:
-        "https://photos.wellfound.com/startups/i/267839-22e9550a168c9834c67a3e55e2577688-medium_jpg.jpg?buster=1677467708",
     },
     domain: String,
   },

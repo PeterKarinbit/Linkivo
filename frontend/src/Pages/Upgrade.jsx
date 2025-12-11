@@ -1,67 +1,41 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useFeatureAccess } from "../hooks/useFeatureAccess";
 import CheckoutForm from "../components/Checkout/CheckoutForm";
 
-const plans = [
+const basePlans = [
   {
-    name: "Free",
+    planKey: "beta",
+    name: "Member",
     priceMonthly: 0,
     priceYearly: 0,
-    badge: "Current Plan",
+    badge: "Beta Access",
     features: [
-      "3 resume scoring cards per month",
-      "10 job recommendations per month",
-      "Community support",
+      "✨ Unlimited Resume Scoring Cards",
+      "✨ Unlimited Job Recommendations",
+      "✨ Unlimited Career Memories",
+      "✨ Unlimited Autonomous Applications",
+      "🎯 Industry Trends Analysis",
+      "🎯 Career Path Analysis",
+      "Advanced Analytics & Export",
+      "Resume Export/Download",
+      "Priority Support",
+      "Community Access",
     ],
-    button: null,
+    button: "Current Plan",
     isCurrent: true,
-  },
-  {
-    name: "Test/Starter",
-    priceMonthly: 9.99,
-    priceMonthlyOld: 12,
-    priceYearly: 109.99,
-    priceYearlyOld: 144,
-    badge: "For Light Users",
-    features: [
-      "20 resume scoring cards per month",
-      "50 job recommendations per month",
-      "25 trials on autonomous job applications",
-      "Access to basic analytics",
-      "Limited access to referral program",
-    ],
-    button: "Choose Starter",
-    isCurrent: false,
-  },
-  {
-    name: "Pro",
-    priceMonthly: 24.99,
-    priceMonthlyOld: null,
-    priceYearly: 279.99,
-    priceYearlyOld: 299.99,
-    badge: "Best Value",
-    features: [
-      "Unlimited resume scoring cards ",
-      "Unlimited job recommendations",
-      "Early access to new features",
-      "Advanced analytics",
-      "Unlimited trials on autonomous job application",
-      "Full access to our referral program",
-      "Resume export/download",
-    ],
-    button: "Choose Pro",
-    isCurrent: false,
-  },
+  }
 ];
 
 
 export default function Upgrade() {
+  const { currentPlan, isLoading } = useFeatureAccess();
   const [billing, setBilling] = useState("monthly");
   const [showComparisonFAQ, setShowComparisonFAQ] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [faqs, setFaqs] = useState([
     {
       q: "What payment methods are accepted?",
-      a: "We accept multiple payment methods through InstaSend including credit/debit cards (Visa, Mastercard), M-Pesa, bank transfers, and other mobile money options to make payments convenient for all our users.",
+      a: "We accept multiple payment methods through Paystack including credit/debit cards (Visa, Mastercard), bank transfers, and mobile money options to make payments convenient for all our users.",
       isOpen: false,
     },
     {
@@ -80,6 +54,14 @@ export default function Upgrade() {
       isOpen: false,
     },
   ]);
+
+  const plans = useMemo(() => {
+    return basePlans.map((p) => ({
+      ...p,
+      isCurrent: true, // Force all plans (there is only one) to be "Current"
+      badge: "Beta Access",
+    }));
+  }, []);
 
   const competitorComparison = (
     <div className="space-y-4">
@@ -113,7 +95,7 @@ export default function Upgrade() {
   );
 
   const toggleFaq = (index) => {
-    setFaqs(faqs.map((faq, i) => 
+    setFaqs(faqs.map((faq, i) =>
       i === index ? { ...faq, isOpen: !faq.isOpen } : faq
     ));
   };
@@ -142,7 +124,7 @@ export default function Upgrade() {
             Choose Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">Perfect Plan</span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Supercharge your job search with AI-powered resume analysis, personalized job recommendations, and expert career guidance.
+            Upgrade to unlock premium AI coaching: a personalized opportunity map, future industry demand alignment, and competitive benchmarking against peers.
           </p>
         </div>
 
@@ -150,21 +132,19 @@ export default function Upgrade() {
         <div className="flex justify-center mb-12">
           <div className="bg-white dark:bg-gray-800 p-1 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <button
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                billing === "monthly" 
-                  ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg" 
-                  : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-              }`}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${billing === "monthly"
+                ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg"
+                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                }`}
               onClick={() => setBilling("monthly")}
             >
               Monthly
             </button>
             <button
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 relative ${
-                billing === "yearly" 
-                  ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg" 
-                  : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-              }`}
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 relative ${billing === "yearly"
+                ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg"
+                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                }`}
               onClick={() => setBilling("yearly")}
             >
               Yearly
@@ -180,21 +160,19 @@ export default function Upgrade() {
           {plans.map((plan, index) => (
             <div
               key={plan.name}
-              className={`relative bg-white dark:bg-gray-800 rounded-2xl p-8 transition-all duration-300 hover:scale-105 ${
-                plan.badge === "Best Value" 
-                  ? "border-2 border-green-500 shadow-2xl shadow-green-500/20" 
-                  : "border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl"
-              }`}
+              className={`relative bg-white dark:bg-gray-800 rounded-2xl p-8 transition-all duration-300 hover:scale-105 ${plan.badge === "Best Value"
+                ? "border-2 border-green-500 shadow-2xl shadow-green-500/20"
+                : "border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl"
+                }`}
             >
               {/* Badge */}
               {plan.badge && (
-                <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full text-sm font-semibold ${
-                  plan.badge === "Best Value" 
-                    ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white" 
-                    : plan.isCurrent 
-                      ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300" 
-                      : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
-                }`}>
+                <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full text-sm font-semibold ${plan.badge === "Best Value"
+                  ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
+                  : plan.isCurrent
+                    ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+                  }`}>
                   {plan.badge}
                 </div>
               )}
@@ -202,7 +180,7 @@ export default function Upgrade() {
               {/* Plan Name */}
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{plan.name}</h3>
-                
+
                 {/* Pricing */}
                 <div className="flex items-end justify-center gap-1 mb-4">
                   {billing === "monthly" ? (
@@ -248,18 +226,20 @@ export default function Upgrade() {
 
               {/* Action Button */}
               {plan.button && !plan.isCurrent && (
-                <button 
-                  className={`w-full py-4 rounded-xl font-semibold transition-all duration-200 ${
-                    plan.badge === "Best Value"
-                      ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl"
-                      : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100"
-                  }`}
-                  onClick={() => setSelectedPlan(plan)}
+                <button
+                  className={`w-full py-4 rounded-xl font-semibold transition-all duration-200 ${plan.badge === "Best Value"
+                    ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl"
+                    : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100"
+                    }`}
+                  onClick={() => {
+                    // Use the unified checkout for ALL tiers to collect customer details
+                    setSelectedPlan(plan);
+                  }}
                 >
                   {plan.button}
                 </button>
               )}
-              
+
               {plan.isCurrent && (
                 <div className="w-full py-4 text-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-xl font-semibold">
                   Current Plan
@@ -295,7 +275,7 @@ export default function Upgrade() {
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
             Frequently Asked Questions
           </h3>
-          
+
           <div className="space-y-4 max-w-4xl mx-auto">
             {faqs.map((faq, idx) => (
               <div key={idx} className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
@@ -321,7 +301,7 @@ export default function Upgrade() {
                 )}
               </div>
             ))}
-            
+
             {/* Competitor Comparison FAQ */}
             <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
               <button
@@ -357,7 +337,7 @@ export default function Upgrade() {
             <p className="text-green-100 mb-6 max-w-2xl mx-auto">
               Join thousands of professionals who have accelerated their career growth with our AI-powered platform.
             </p>
-            <button 
+            <button
               onClick={scrollToPricing}
               className="bg-white text-green-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg"
             >

@@ -1,12 +1,47 @@
+import { Subscription } from "../models/subscription.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { Subscription } from "../models/subscription.model.js";
 import { FeatureAccess } from "../utils/featureAccess.js";
+
+// Temporarily bypassing subscription checks for development
+// TODO: Re-enable subscription checks before production
+
+export function requireFeature(featureName) {
+  return async function(req, res, next) {
+    try {
+      const userId = req.user?._id;
+      if (!userId) throw new ApiError(401, "Unauthorized");
+
+      // Bypass subscription checks - temporarily allowing all features
+      console.warn('Subscription checks are currently disabled for development');
+      
+      // Still try to get or create subscription for tracking
+      let sub = await Subscription.findOne({ userId });
+      if (!sub) {
+        sub = await Subscription.create({
+          userId,
+          plan: "pro",  // Default to pro features
+          status: "active",
+          currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year
+        });
+      }
+      
+      req.subscription = sub;
+      next();
+    } catch (err) {
+      console.error('Error in requireFeature middleware:', err);
+      // Allow access even if subscription creation fails
+      next();
+    }
+  };
+}
+
 
 // Middleware to check if user can access a specific feature
 export const requireFeatureAccess = (featureName) => {
   return asyncHandler(async (req, res, next) => {
     try {
+      console.warn('Feature access checks are currently disabled for development - allowing access to:', featureName);
       const user = req.user;
       if (!user) {
         throw new ApiError(401, "Authentication required");

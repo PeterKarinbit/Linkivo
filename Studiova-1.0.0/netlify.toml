@@ -1,0 +1,30 @@
+[build]
+  publish = "/"
+  command = ""
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com;"
+    
+[context.production.environment]
+  NODE_ENV = "production"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "staging"
+
+[context.branch-deploy.environment]
+  NODE_ENV = "staging"

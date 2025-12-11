@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import Terms from "../Pages/Legal/Terms";
+import Privacy from "../Pages/Legal/Privacy";
 import Home from "../Pages/Home";
 import HomeLoggedIn from "../Pages/HomeLoggedIn";
-import Login from "../components/LoginSignup/Login";
-import Signup from "../components/LoginSignup/Signup";
-import SkillGapAnalyzer from "../Pages/JobListing";
+import LoginSignUp from "../Pages/LoginSignUp";
+import AICareerCoach from "../Pages/AICareerCoach";
+import EnhancedAICareerCoach from "../Pages/EnhancedAICareerCoach";
 import JobDetails from "../Pages/JobDetails";
 import Community from "../Pages/Community";
 import CompanyDashboard from "../Pages/CompanyDashboard";
@@ -16,13 +18,24 @@ import CompanyOnboarding from "../components/LoginSignup/CompanyOnboarding";
 import NotFound from "../components/NotFound";
 import PrivateRoutes from "./PrivateRoutes";
 import SavedJobs from "../Pages/SavedJobs";
-import UserPublicProfile from "../Pages/UserPublicProfile";
+
 import Settings from "../Pages/Settings";
 import Upgrade from "../Pages/Upgrade";
 import Upload from "../Pages/Upload";
 import { useSelector } from "react-redux";
 import CommunityLoading from "../Pages/CommunityLoading";
 import ReferFriend from "../Pages/ReferFriend";
+import PaymentSuccess from "../Pages/PaymentSuccess";
+import PaymentStatus from "../Pages/PaymentStatus";
+import PaymentCallback from "../Pages/PaymentCallback";
+import Contact from "../Pages/Contact";
+import CareerInsightsPage from "../pages/CareerInsightsPage";
+import CareerMemoriesTestPage from "../pages/test/CareerMemoriesTestPage";
+import AntigravityAuth from "../Pages/ClerkSignUpAntigravity";
+import ClerkSignIn from "../Pages/ClerkSignIn";
+import ClerkSignUp from "../Pages/ClerkSignUp";
+import SSOCallback from "../Pages/SSOCallback";
+import Careers from "../Pages/Careers";
 
 function AllRoutes() {
   const { userData } = useSelector((store) => store.auth);
@@ -39,7 +52,9 @@ function AllRoutes() {
         path="/"
         element={
           userData ? (
-            <Navigate to="/home-logged-in" replace />
+            <PrivateRoutes>
+              <HomeLoggedIn />
+            </PrivateRoutes>
           ) : (
             <Home />
           )
@@ -53,8 +68,13 @@ function AllRoutes() {
           </PrivateRoutes>
         }
       />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<LoginSignUp />} />
+      <Route path="/signup" element={<LoginSignUp />} />
+      {/* Clerk Auth Routes - New users */}
+      <Route path="/clerk-sign-in/*" element={<ClerkSignIn />} />
+      <Route path="/clerk-sign-up/*" element={<ClerkSignUp />} />
+      <Route path="/sso-callback" element={<SSOCallback />} />
+      <Route path="/careers" element={<Careers />} />
       <Route
         path="/upload"
         element={
@@ -64,10 +84,26 @@ function AllRoutes() {
         }
       />
       <Route
-        path="/jobs"
+        path="/career-coach"
         element={
           <PrivateRoutes>
-            <SkillGapAnalyzer />
+            <EnhancedAICareerCoach />
+          </PrivateRoutes>
+        }
+      />
+      <Route
+        path="/career-coach/insights"
+        element={
+          <PrivateRoutes>
+            <CareerInsightsPage />
+          </PrivateRoutes>
+        }
+      />
+      <Route
+        path="/career-coach-legacy"
+        element={
+          <PrivateRoutes>
+            <AICareerCoach />
           </PrivateRoutes>
         }
       />
@@ -89,7 +125,7 @@ function AllRoutes() {
           </PrivateRoutes>
         }
       />
-      <Route path="/user/:id" element={<UserPublicProfile />} />
+
       <Route
         path="/dashboard/*"
         element={
@@ -123,8 +159,17 @@ function AllRoutes() {
         }
       />
       <Route path="/user-onboarding" element={<UserOnboaring />} />
+      <Route path="/legal/terms" element={<Terms />} />
+      <Route path="/legal/privacy" element={<Privacy />} />
       <Route path="/company-onboarding" element={<CompanyOnboarding />} />
       <Route path="/saved-jobs" element={<SavedJobs />} />
+      <Route path="/payment-success" element={<PaymentSuccess />} />
+      <Route path="/payment-status" element={<PaymentStatus />} />
+      <Route path="/payment/callback" element={<PaymentCallback />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/test/career-memories" element={<CareerMemoriesTestPage />} />
       <Route
         path="/refer-friend"
         element={

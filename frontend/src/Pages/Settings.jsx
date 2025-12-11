@@ -1,48 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { userService } from "../services/userService";
 import { useDarkMode } from "../context/DarkModeContext";
+import { useClerk } from "@clerk/clerk-react";
 
-// Enhanced Switch component with loading state and better accessibility
+// Enhanced Switch component
 function Switch({ checked, onChange, id, disabled = false, loading = false }) {
   return (
     <button
       type="button"
       id={id}
       disabled={disabled || loading}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
-        disabled || loading 
-          ? 'opacity-50 cursor-not-allowed bg-gray-300 dark:bg-gray-600' 
-          : checked 
-            ? 'bg-green-600 hover:bg-green-700' 
-            : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-      }`}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${disabled || loading
+        ? 'opacity-50 cursor-not-allowed bg-gray-300 dark:bg-gray-600'
+        : checked
+          ? 'bg-emerald-600 hover:bg-emerald-700'
+          : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+        }`}
       onClick={() => !disabled && !loading && onChange(!checked)}
       aria-pressed={checked}
       aria-describedby={`${id}-description`}
     >
       <span
-        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-lg transition-transform duration-300 ${
-          checked ? 'translate-x-5' : 'translate-x-1'
-        } ${loading ? 'animate-pulse' : ''}`}
+        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-lg transition-transform duration-300 ${checked ? 'translate-x-5' : 'translate-x-1'
+          } ${loading ? 'animate-pulse' : ''}`}
       />
     </button>
   );
 }
 
-// Enhanced notification component
+// Notification Banner
 function NotificationBanner({ message, type = 'success', onClose }) {
   useEffect(() => {
     const timer = setTimeout(onClose, 3000);
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  const bgColor = type === 'error' 
-    ? 'bg-red-100 dark:bg-red-900 border-red-200 dark:border-red-800' 
-    : 'bg-green-100 dark:bg-green-900 border-green-200 dark:border-green-800';
-  
+  const bgColor = type === 'error'
+    ? 'bg-red-100 dark:bg-red-900 border-red-200 dark:border-red-800'
+    : 'bg-emerald-100 dark:bg-emerald-900 border-emerald-200 dark:border-emerald-800';
+
   const textColor = type === 'error'
     ? 'text-red-700 dark:text-red-100'
-    : 'text-green-700 dark:text-green-100';
+    : 'text-emerald-700 dark:text-emerald-100';
 
   return (
     <div className={`mb-6 p-4 rounded-lg border ${bgColor} ${textColor} flex items-center justify-between shadow-sm`}>
@@ -52,7 +51,7 @@ function NotificationBanner({ message, type = 'success', onClose }) {
         </span>
         {message}
       </span>
-      <button 
+      <button
         onClick={onClose}
         className="ml-4 text-lg font-bold hover:opacity-70 transition-opacity"
         aria-label="Close notification"
@@ -64,7 +63,7 @@ function NotificationBanner({ message, type = 'success', onClose }) {
 }
 
 function Settings() {
-  // Enhanced localStorage utility with error handling
+  const { signOut } = useClerk();
   const getPref = (key, defaultValue) => {
     try {
       const val = localStorage.getItem(key);
@@ -88,41 +87,111 @@ function Settings() {
     }
   };
 
-  // Job Search Settings
-  const [jobType, setJobType] = useState(getPref("jobType", "Full-time"));
-  const [jobLocation, setJobLocation] = useState(getPref("jobLocation", ""));
-  const [searchRadius, setSearchRadius] = useState(getPref("searchRadius", "50"));
-  const [salaryRange, setSalaryRange] = useState(getPref("salaryRange", "any"));
-  
-  // Application Settings
-  const [jobMatchScore, setJobMatchScore] = useState(getPref("jobMatchScore", true));
-  const [followUpDays, setFollowUpDays] = useState(getPref("followUpDays", "7"));
-  
+  // --- State ---
+  const [activeTab, setActiveTab] = useState("account");
+
+  // AI & Privacy Settings
+  const [aiConsent, setAiConsent] = useState(getPref("aiConsent", true));
+  const [personalization, setPersonalization] = useState(getPref("personalization", true));
+  const [aiScopes, setAiScopes] = useState({
+    resume: getPref("scope_resume", true),
+    journals: getPref("scope_journals", true),
+    goals: getPref("scope_goals", true),
+    tasks: getPref("scope_tasks", true),
+    applications: getPref("scope_applications", true),
+    knowledgeBase: getPref("scope_knowledge", true)
+  });
+
+  // Initialize from localStorage if backend hasn't loaded yet
+  useEffect(() => {
+    if (aiScopes.resume === undefined) {
+      setAiScopes({
+        resume: getPref("scope_resume", true),
+        journals: getPref("scope_journals", true),
+        goals: getPref("scope_goals", true),
+        tasks: getPref("scope_tasks", true),
+        applications: getPref("scope_applications", true),
+        knowledgeBase: getPref("scope_knowledge", true)
+      });
+    }
+  }, []);
+
   // Notification Settings
   const [emailAlerts, setEmailAlerts] = useState(getPref("emailAlerts", true));
   const [appStatusUpdates, setAppStatusUpdates] = useState(getPref("appStatusUpdates", true));
   const [jobAlerts, setJobAlerts] = useState(getPref("jobAlerts", true));
-  
-  // Appearance Settings
-  const { darkMode, setDarkMode } = useDarkMode();
 
-  // Enhanced notification state
+  // Display & Preferences Settings
+  const { darkMode, setDarkMode } = useDarkMode();
+  const [timeFormat, setTimeFormat] = useState(getPref("timeFormat", "12h"));
+  const [profileVisibility, setProfileVisibility] = useState(getPref("profileVisibility", "public"));
+
+  // UI State
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState({});
 
-  // Modal state
+  // Modal State
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // Form state
+  // Form State
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passwordForEmail, setPasswordForEmail] = useState("");
 
-  // Enhanced notification helper
+  // --- Load AI Consent from Backend ---
+  useEffect(() => {
+    const loadAIConsent = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) return;
+
+        const baseOrigin = import.meta?.env?.VITE_API_BASE_URL || '';
+        const response = await fetch(`${baseOrigin}/api/v1/enhanced-ai-career-coach/consent`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.data) {
+            const consent = data.data;
+            setAiConsent(consent.enabled !== undefined ? consent.enabled : true);
+            if (consent.scopes) {
+              setAiScopes(prev => ({
+                resume: consent.scopes.resume !== undefined ? consent.scopes.resume : prev.resume,
+                journals: consent.scopes.journals !== undefined ? consent.scopes.journals : prev.journals,
+                goals: consent.scopes.goals !== undefined ? consent.scopes.goals : prev.goals,
+                tasks: consent.scopes.tasks !== undefined ? consent.scopes.tasks : prev.tasks,
+                applications: consent.scopes.applications !== undefined ? consent.scopes.applications : prev.applications,
+                knowledgeBase: consent.scopes.knowledgeBase !== undefined ? consent.scopes.knowledgeBase : prev.knowledgeBase
+              }));
+
+              // Also update localStorage
+              setPref("scope_resume", consent.scopes.resume !== undefined ? consent.scopes.resume : true);
+              setPref("scope_journals", consent.scopes.journals !== undefined ? consent.scopes.journals : true);
+              setPref("scope_goals", consent.scopes.goals !== undefined ? consent.scopes.goals : true);
+              setPref("scope_tasks", consent.scopes.tasks !== undefined ? consent.scopes.tasks : true);
+              setPref("scope_applications", consent.scopes.applications !== undefined ? consent.scopes.applications : true);
+              setPref("scope_knowledge", consent.scopes.knowledgeBase !== undefined ? consent.scopes.knowledgeBase : true);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading AI consent:', error);
+      }
+    };
+
+    loadAIConsent();
+  }, []);
+
+  // --- Helpers ---
+
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
   };
@@ -131,42 +200,59 @@ function Settings() {
     setNotification(null);
   };
 
-  // Enhanced save handlers with loading states and error handling
-  const saveJobPrefs = async () => {
-    setLoading(prev => ({ ...prev, jobPrefs: true }));
-    try {
-      const success = setPref("jobType", jobType) &&
-                     setPref("jobLocation", jobLocation) &&
-                     setPref("searchRadius", searchRadius) &&
-                     setPref("salaryRange", salaryRange);
-      
-      if (success) {
-        showNotification("Job preferences saved successfully!");
-      } else {
-        showNotification("Failed to save some preferences", "error");
-      }
-    } catch (error) {
-      showNotification("Failed to save job preferences", "error");
-    } finally {
-      setLoading(prev => ({ ...prev, jobPrefs: false }));
-    }
-  };
+  // --- Save Handlers ---
 
-  const saveApplicationSettings = async () => {
-    setLoading(prev => ({ ...prev, appSettings: true }));
+  const saveAiSettings = async () => {
+    setLoading(prev => ({ ...prev, aiSettings: true }));
     try {
-      const success = setPref("jobMatchScore", jobMatchScore) &&
-                     setPref("followUpDays", followUpDays);
-      
-      if (success) {
-        showNotification("Application settings saved successfully!");
-      } else {
-        showNotification("Failed to save application settings", "error");
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        showNotification("Please log in to save settings", "error");
+        return;
       }
+
+      // Save to backend API
+      const baseOrigin = import.meta?.env?.VITE_API_BASE_URL || '';
+      const response = await fetch(`${baseOrigin}/api/v1/enhanced-ai-career-coach/consent`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          enabled: aiConsent,
+          scopes: {
+            resume: aiScopes.resume,
+            journals: aiScopes.journals,
+            goals: aiScopes.goals,
+            tasks: aiScopes.tasks,
+            applications: aiScopes.applications,
+            knowledgeBase: aiScopes.knowledgeBase
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to save AI settings');
+      }
+
+      // Also save to localStorage for quick access
+      setPref("aiConsent", aiConsent);
+      setPref("personalization", personalization);
+      setPref("scope_resume", aiScopes.resume);
+      setPref("scope_journals", aiScopes.journals);
+      setPref("scope_goals", aiScopes.goals);
+      setPref("scope_tasks", aiScopes.tasks);
+      setPref("scope_applications", aiScopes.applications);
+      setPref("scope_knowledge", aiScopes.knowledgeBase);
+
+      showNotification("AI & Privacy settings saved successfully!");
     } catch (error) {
-      showNotification("Failed to save application settings", "error");
+      console.error('Error saving AI settings:', error);
+      showNotification(error.message || "Failed to save AI settings", "error");
     } finally {
-      setLoading(prev => ({ ...prev, appSettings: false }));
+      setLoading(prev => ({ ...prev, aiSettings: false }));
     }
   };
 
@@ -174,9 +260,9 @@ function Settings() {
     setLoading(prev => ({ ...prev, notifications: true }));
     try {
       const success = setPref("emailAlerts", emailAlerts) &&
-                     setPref("appStatusUpdates", appStatusUpdates) &&
-                     setPref("jobAlerts", jobAlerts);
-      
+        setPref("appStatusUpdates", appStatusUpdates) &&
+        setPref("jobAlerts", jobAlerts);
+
       if (success) {
         showNotification("Notification preferences saved successfully!");
       } else {
@@ -189,40 +275,87 @@ function Settings() {
     }
   };
 
-  const saveAppearance = async () => {
-    setLoading(prev => ({ ...prev, appearance: true }));
+  const saveDisplayPreferences = async () => {
+    setLoading(prev => ({ ...prev, display: true }));
     try {
-      const success = setPref("darkMode", darkMode);
-      if (success) {
-        showNotification("Appearance settings saved successfully!");
+      // Save time format preference
+      const timeFormatSuccess = setPref("timeFormat", timeFormat);
+      const profileVisibilitySuccess = setPref("profileVisibility", profileVisibility);
+
+      // Dark mode is handled by DarkModeContext automatically
+      // But we can also save it for consistency
+      setPref("darkMode", darkMode);
+
+      if (timeFormatSuccess && profileVisibilitySuccess) {
+        showNotification("Display preferences saved successfully!");
       } else {
-        showNotification("Failed to save appearance settings", "error");
+        showNotification("Failed to save display preferences", "error");
       }
     } catch (error) {
-      showNotification("Failed to save appearance settings", "error");
+      console.error('Error saving display preferences:', error);
+      showNotification("Failed to save display preferences", "error");
     } finally {
-      setLoading(prev => ({ ...prev, appearance: false }));
+      setLoading(prev => ({ ...prev, display: false }));
     }
   };
 
-  // Enhanced form handlers with better validation
+  const handleExportData = async () => {
+    setLoading(prev => ({ ...prev, export: true }));
+    try {
+      // Get user profile data
+      const userData = await userService.getCurrentUser();
+
+      // Create export data
+      const exportData = {
+        exportedAt: new Date().toISOString(),
+        profile: userData.data,
+        preferences: {
+          darkMode,
+          timeFormat,
+          profileVisibility,
+          aiConsent,
+          personalization,
+          emailAlerts,
+          appStatusUpdates,
+          jobAlerts
+        }
+      };
+
+      // Create and download JSON file
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `jobhunter-data-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showNotification("Data exported successfully!");
+    } catch (error) {
+      showNotification("Failed to export data", "error");
+    } finally {
+      setLoading(prev => ({ ...prev, export: false }));
+    }
+  };
+
+  // --- Account Handlers ---
+
   const handleChangePassword = async (e) => {
     e.preventDefault();
     setLoading(prev => ({ ...prev, password: true }));
-    
-    // Enhanced validation
     if (newPassword.length < 6) {
       showNotification("New password must be at least 6 characters long", "error");
       setLoading(prev => ({ ...prev, password: false }));
       return;
     }
-    
     if (newPassword !== confirmPassword) {
       showNotification("New passwords do not match", "error");
       setLoading(prev => ({ ...prev, password: false }));
       return;
     }
-    
     try {
       await userService.changePassword({ currentPassword, newPassword });
       showNotification("Password changed successfully!");
@@ -240,15 +373,12 @@ function Settings() {
   const handleUpdateEmail = async (e) => {
     e.preventDefault();
     setLoading(prev => ({ ...prev, email: true }));
-    
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       showNotification("Please enter a valid email address", "error");
       setLoading(prev => ({ ...prev, email: false }));
       return;
     }
-    
     try {
       await userService.updateEmail({ email, password: passwordForEmail });
       showNotification("Email updated successfully!");
@@ -267,9 +397,13 @@ function Settings() {
     try {
       await userService.deleteAccount();
       showNotification("Account deleted. Logging out...");
+
+      // Sign out from Clerk to prevent auto-login
+      await signOut();
+
       setTimeout(() => {
         window.location.href = "/";
-      }, 1500);
+      }, 500);
     } catch (err) {
       showNotification(err.message || "Failed to delete account", "error");
     } finally {
@@ -277,40 +411,26 @@ function Settings() {
     }
   };
 
-  // Enhanced job type handler
-  const handleJobTypeChange = (type, checked) => {
-    const types = jobType ? jobType.split(",").filter(Boolean) : [];
-    if (checked) {
-      if (!types.includes(type)) {
-        setJobType([...types, type].join(","));
-      }
-    } else {
-      setJobType(types.filter(t => t !== type).join(","));
-    }
-  };
-
-  // Enhanced modal renderer with better animations and accessibility
+  // --- Modal Renderer ---
   const renderModal = (isOpen, title, onClose, children) => {
     if (!isOpen) return null;
-    
     return (
-      <div 
+      <div
         className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn"
         onClick={(e) => e.target === e.currentTarget && onClose()}
       >
         <div className="bg-white dark:bg-gray-900 rounded-xl p-8 w-full max-w-md shadow-2xl relative border dark:border-gray-700 transform animate-slideUp max-h-[90vh] overflow-y-auto">
-          <button 
-            className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" 
+          <button
+            className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={onClose}
             aria-label="Close modal"
           >
             ×
           </button>
-          <h3 className={`text-xl font-bold mb-6 pr-8 ${
-            title.toLowerCase().includes('delete') 
-              ? 'text-red-600 dark:text-red-400' 
-              : 'text-gray-900 dark:text-gray-100'
-          }`}>
+          <h3 className={`text-xl font-bold mb-6 pr-8 ${title.toLowerCase().includes('delete')
+            ? 'text-red-600 dark:text-red-400'
+            : 'text-gray-900 dark:text-gray-100'
+            }`}>
             {title}
           </h3>
           {children}
@@ -319,11 +439,21 @@ function Settings() {
     );
   };
 
+  const tabs = [
+    { id: 'notifications', label: 'Notifications', icon: 'fa-bell' },
+    { id: 'ai', label: 'AI & Privacy', icon: 'fa-robot' },
+    { id: 'display', label: 'Display & Preferences', icon: 'fa-sliders' },
+    { id: 'account', label: 'Account Security', icon: 'fa-user-shield' },
+  ];
+
   return (
-    <div className="mt-20 px-5 xl:px-28 bg-gradient-to-br from-green-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen transition-colors duration-300">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="font-bold text-4xl mb-8 text-gray-900 dark:text-gray-100">Settings</h2>
-        
+    <div className="mt-20 px-6 bg-gray-50 dark:bg-gray-900 min-h-screen pb-10">
+      <div className="max-w-[1600px] mx-auto">
+        <div className="mb-8">
+          <h2 className="font-bold text-3xl text-gray-900 dark:text-white">Settings</h2>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">Manage your account, privacy, and preferences.</p>
+        </div>
+
         {notification && (
           <NotificationBanner
             message={notification.message}
@@ -332,255 +462,279 @@ function Settings() {
           />
         )}
 
-        <div className="space-y-8">
-          {/* Application Settings */}
-          <section className="border border-gray-200 dark:border-gray-700 p-8 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-6">
-              <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mr-4">
-                <span className="text-green-600 dark:text-green-400 text-xl">⚙️</span>
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Sidebar Navigation */}
+          <div className="w-full md:w-72 flex-shrink-0">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden sticky top-24">
+              <div className="flex flex-col">
+                {tabs.map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-3 px-5 py-4 text-sm font-medium transition-colors text-left border-l-4 ${activeTab === tab.id
+                      ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
+                      : "border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                  >
+                    <i className={`fa-solid ${tab.icon} w-5 text-center`}></i>
+                    {tab.label}
+                  </button>
+                ))}
               </div>
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Application Settings</h3>
             </div>
-            <div className="space-y-6">
-              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div>
-                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Show Job Match Score</span>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Display compatibility scores for job listings</p>
-                </div>
-                <Switch 
-                  checked={jobMatchScore} 
-                  onChange={setJobMatchScore} 
-                  id="job-match-score"
-                  loading={loading.appSettings}
-                />
-              </div>
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                  Follow-up Reminder
-                </label>
-                <p className="text-xs text-gray-500 dark:text-gray-400">How often to remind you to follow up on applications</p>
-                <select
-                  value={followUpDays}
-                  onChange={e => setFollowUpDays(e.target.value)}
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  disabled={loading.appSettings}
-                >
-                  <option value="3">Every 3 days</option>
-                  <option value="5">Every 5 days</option>
-                  <option value="7">Every 7 days</option>
-                  <option value="14">Every 14 days</option>
-                </select>
-              </div>
-              <button
-                onClick={saveApplicationSettings}
-                disabled={loading.appSettings}
-                className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center"
-              >
-                {loading.appSettings ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  'Save Application Settings'
-                )}
-              </button>
-            </div>
-          </section>
+          </div>
 
-          {/* Job Preferences Section */}
-          <section className="border border-gray-200 dark:border-gray-700 p-8 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-6">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mr-4">
-                <span className="text-blue-600 dark:text-blue-400 text-xl">💼</span>
-              </div>
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Job Preferences</h3>
-            </div>
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
-                  Preferred Job Types
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {['Full-time', 'Part-time', 'Remote', 'Internship', 'Contract'].map((type) => (
-                    <label key={type} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={jobType.includes(type)}
-                        onChange={e => handleJobTypeChange(type, e.target.checked)}
-                        className="form-checkbox h-5 w-5 text-green-600 rounded border-gray-300 dark:border-gray-600 focus:ring-green-500"
-                        disabled={loading.jobPrefs}
-                      />
-                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{type}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                  Preferred Location
-                </label>
-                <input
-                  type="text"
-                  value={jobLocation}
-                  onChange={e => setJobLocation(e.target.value)}
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                  placeholder="e.g. Nairobi, Kenya"
-                  disabled={loading.jobPrefs}
-                />
-              </div>
-              
-              <button
-                onClick={saveJobPrefs}
-                disabled={loading.jobPrefs}
-                className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center"
-              >
-                {loading.jobPrefs ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  'Save Job Preferences'
-                )}
-              </button>
-            </div>
-          </section>
+          {/* Content Area */}
+          <div className="flex-1">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 min-h-[500px]">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-gray-700">
+                {tabs.find(t => t.id === activeTab)?.label}
+              </h3>
 
-          {/* Notifications Section */}
-          <section className="border border-gray-200 dark:border-gray-700 p-8 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-6">
-              <div className="w-10 h-10 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center mr-4">
-                <span className="text-yellow-600 dark:text-yellow-400 text-xl">🔔</span>
-              </div>
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Notifications</h3>
-            </div>
-            <div className="space-y-4">
-              {[
-                { key: 'emailAlerts', label: 'Email Job Alerts', desc: 'Receive new job opportunities via email', checked: emailAlerts, onChange: setEmailAlerts },
-                { key: 'appStatusUpdates', label: 'Application Status Updates', desc: 'Get notified when application status changes', checked: appStatusUpdates, onChange: setAppStatusUpdates },
-                { key: 'jobAlerts', label: 'Job Alerts', desc: 'Instant notifications for matching jobs', checked: jobAlerts, onChange: setJobAlerts }
-              ].map(({ key, label, desc, checked, onChange }) => (
-                <div key={key} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                  <div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{label}</span>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{desc}</p>
+              {activeTab === 'notifications' && (
+                <div className="space-y-4">
+                  <div className="p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-lg border border-yellow-200 dark:border-yellow-900/30">
+                    <div className="flex items-start gap-3">
+                      <i className="fa-solid fa-info-circle text-yellow-600 dark:text-yellow-400 mt-0.5"></i>
+                      <div>
+                        <h4 className="text-sm font-semibold text-yellow-800 dark:text-yellow-300 mb-1">
+                          Notification Settings Coming Soon
+                        </h4>
+                        <p className="text-xs text-yellow-700 dark:text-yellow-400">
+                          Email and push notification preferences will be available in a future update. For now, all notifications are enabled by default.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <Switch 
-                    checked={checked} 
-                    onChange={onChange} 
-                    id={key}
-                    loading={loading.notifications}
-                  />
-                </div>
-              ))}
-              <button
-                onClick={saveNotifications}
-                disabled={loading.notifications}
-                className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center"
-              >
-                {loading.notifications ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  'Save Notification Settings'
-                )}
-              </button>
-            </div>
-          </section>
 
-          {/* Appearance Section */}
-          <section className="border border-gray-200 dark:border-gray-700 p-8 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-6">
-              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mr-4">
-                <span className="text-purple-600 dark:text-purple-400 text-xl">🎨</span>
-              </div>
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Appearance</h3>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div>
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Dark Mode</span>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Toggle between light and dark themes</p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Switch 
-                  checked={darkMode} 
-                  onChange={setDarkMode} 
-                  id="darkMode"
-                  loading={loading.appearance}
-                />
-                <button
-                  onClick={saveAppearance}
-                  disabled={loading.appearance}
-                  className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center"
-                >
-                  {loading.appearance ? (
-                    <>
-                      <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1"></div>
-                      Saving...
-                    </>
-                  ) : (
-                    'Save'
-                  )}
-                </button>
-              </div>
-            </div>
-          </section>
+                  <div className="space-y-3 opacity-60">
+                    {[
+                      { key: 'emailAlerts', label: 'Email Job Alerts', desc: 'Get new opportunities via email', checked: true, onChange: () => { } },
+                      { key: 'appStatusUpdates', label: 'Application Updates', desc: 'Status changes on your applications', checked: true, onChange: () => { } },
+                      { key: 'jobAlerts', label: 'Instant Job Alerts', desc: 'Real-time notifications for matches', checked: true, onChange: () => { } }
+                    ].map(({ key, label, desc, checked, onChange }) => (
+                      <div key={key} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-100 dark:border-gray-600">
+                        <div>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">{label}</span>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{desc}</p>
+                        </div>
+                        <Switch checked={checked} onChange={onChange} id={key} disabled={true} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-          {/* Account Management Section */}
-          <section className="border border-gray-200 dark:border-gray-700 p-8 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-6">
-              <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mr-4">
-                <span className="text-red-600 dark:text-red-400 text-xl">👤</span>
-              </div>
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">Account Management</h3>
+              {activeTab === 'ai' && (
+                <div className="space-y-6">
+                  <div className="p-4 bg-purple-50 dark:bg-purple-900/10 rounded-lg border border-purple-100 dark:border-purple-900/30 mb-6">
+                    <p className="text-sm text-purple-800 dark:text-purple-300">
+                      <i className="fa-solid fa-shield-halved mr-2"></i>
+                      Control exactly what data your AI Coach can access to personalize your experience.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+                      General Permissions
+                    </h4>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">AI Data Usage</span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Allow AI to use data for basic personalization</p>
+                      </div>
+                      <Switch checked={aiConsent} onChange={setAiConsent} id="aiConsent" loading={loading.aiSettings} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">Personalized Insights</span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Receive tailored career recommendations</p>
+                      </div>
+                      <Switch checked={personalization} onChange={setPersonalization} id="personalization" loading={loading.aiSettings} />
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-100 dark:border-gray-700 pt-4 space-y-4">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Data Access Scopes
+                    </h4>
+                    {[
+                      { id: 'resume', label: 'Resume & CV', desc: 'Allow analysis of your resume for job matching' },
+                      { id: 'journals', label: 'Career Journals', desc: 'Learn from your reflections and notes' },
+                      { id: 'goals', label: 'Goals & Targets', desc: 'Align recommendations with your set goals' },
+                      { id: 'tasks', label: 'Tasks & To-dos', desc: 'Access your task list for better planning' },
+                      { id: 'applications', label: 'Job Applications', desc: 'Track and optimize your application history' },
+                      { id: 'knowledgeBase', label: 'Knowledge Base', desc: 'Reference your uploaded documents' }
+                    ].map(scope => (
+                      <div key={scope.id} className="flex items-center justify-between py-2">
+                        <div>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">{scope.label}</span>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{scope.desc}</p>
+                        </div>
+                        <Switch
+                          checked={aiScopes[scope.id] || false}
+                          onChange={(val) => setAiScopes(prev => ({ ...prev, [scope.id]: val }))}
+                          id={scope.id}
+                          loading={loading.aiSettings}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={saveAiSettings}
+                    disabled={loading.aiSettings}
+                    className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white px-6 py-2 rounded-lg font-medium transition-colors w-full md:w-auto"
+                  >
+                    {loading.aiSettings ? 'Saving...' : 'Save AI & Privacy Settings'}
+                  </button>
+                </div>
+              )}
+
+              {activeTab === 'display' && (
+                <div className="space-y-6">
+                  {/* Theme Settings */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Theme
+                    </h4>
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-100 dark:border-gray-600">
+                      <div>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">Dark Mode</span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Toggle light/dark theme</p>
+                      </div>
+                      <Switch checked={darkMode} onChange={setDarkMode} id="darkMode" loading={loading.display} />
+                    </div>
+                  </div>
+
+                  {/* Time Format */}
+                  <div className="border-t border-gray-100 dark:border-gray-700 pt-4 space-y-4">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Time Display
+                    </h4>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Time Format</label>
+                      <select
+                        value={timeFormat}
+                        onChange={(e) => setTimeFormat(e.target.value)}
+                        className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                        disabled={loading.display}
+                      >
+                        <option value="12h">12-hour (AM/PM)</option>
+                        <option value="24h">24-hour</option>
+                      </select>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Choose how time is displayed throughout the application
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Profile Settings */}
+                  <div className="border-t border-gray-100 dark:border-gray-700 pt-4 space-y-4">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Profile Visibility
+                    </h4>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Who can see your profile</label>
+                      <select
+                        value={profileVisibility}
+                        onChange={(e) => setProfileVisibility(e.target.value)}
+                        className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                        disabled={loading.display}
+                      >
+                        <option value="public">Public - Everyone can see</option>
+                        <option value="registered">Registered Users Only</option>
+                        <option value="private">Private - Only You</option>
+                      </select>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {profileVisibility === 'public' && 'Your profile is visible to all users and employers'}
+                        {profileVisibility === 'registered' && 'Only registered users can view your profile'}
+                        {profileVisibility === 'private' && 'Your profile is hidden from everyone'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Data Management */}
+                  <div className="border-t border-gray-100 dark:border-gray-700 pt-4 space-y-4">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Data Management
+                    </h4>
+                    <button
+                      onClick={handleExportData}
+                      disabled={loading.export}
+                      className="w-full text-left p-4 bg-blue-50 dark:bg-blue-900/10 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/20 transition-colors group border border-blue-100 dark:border-blue-900/30"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-blue-600 dark:text-blue-400 font-medium flex items-center gap-2">
+                            <i className="fa-solid fa-download"></i>
+                            Export My Data
+                          </span>
+                          <p className="text-xs text-blue-500/70 dark:text-blue-400/70 mt-1">
+                            Download all your data as JSON file
+                          </p>
+                        </div>
+                        <i className="fa-solid fa-chevron-right text-blue-400 group-hover:text-blue-600"></i>
+                      </div>
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={saveDisplayPreferences}
+                    disabled={loading.display}
+                    className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white px-6 py-2 rounded-lg font-medium transition-colors w-full md:w-auto"
+                  >
+                    {loading.display ? 'Saving...' : 'Save Preferences'}
+                  </button>
+                </div>
+              )}
+
+              {activeTab === 'account' && (
+                <div className="space-y-4">
+                  <button
+                    className="w-full text-left p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group border border-gray-100 dark:border-gray-600"
+                    onClick={() => { setShowPasswordModal(true); clearNotification(); }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-gray-900 dark:text-white font-medium">Change Password</span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Update your login password</p>
+                      </div>
+                      <i className="fa-solid fa-chevron-right text-gray-400 group-hover:text-emerald-500"></i>
+                    </div>
+                  </button>
+                  <button
+                    className="w-full text-left p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group border border-gray-100 dark:border-gray-600"
+                    onClick={() => { setShowEmailModal(true); clearNotification(); }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-gray-900 dark:text-white font-medium">Update Email</span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Change your registered email</p>
+                      </div>
+                      <i className="fa-solid fa-chevron-right text-gray-400 group-hover:text-emerald-500"></i>
+                    </div>
+                  </button>
+                  <button
+                    className="w-full text-left p-4 bg-red-50 dark:bg-red-900/10 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/20 transition-colors group border border-red-100 dark:border-red-900/30"
+                    onClick={() => { setShowDeleteModal(true); clearNotification(); }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-red-600 dark:text-red-400 font-medium">Delete Account</span>
+                        <p className="text-xs text-red-500/70 dark:text-red-400/70 mt-1">Permanently remove your data</p>
+                      </div>
+                      <i className="fa-solid fa-chevron-right text-red-400 group-hover:text-red-600"></i>
+                    </div>
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="space-y-4">
-              <button
-                className="w-full text-left p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group"
-                onClick={() => { setShowPasswordModal(true); clearNotification(); }}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-green-600 dark:text-green-400 font-medium text-lg">Change Password</span>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Update your account password</p>
-                  </div>
-                  <span className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">→</span>
-                </div>
-              </button>
-              <button
-                className="w-full text-left p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group"
-                onClick={() => { setShowEmailModal(true); clearNotification(); }}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-green-600 dark:text-green-400 font-medium text-lg">Update Email</span>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Change your email address</p>
-                  </div>
-                  <span className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">→</span>
-                </div>
-              </button>
-              <button
-                className="w-full text-left p-4 bg-red-50 dark:bg-red-900 rounded-lg hover:bg-red-100 dark:hover:bg-red-800 transition-colors group"
-                onClick={() => { setShowDeleteModal(true); clearNotification(); }}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-red-600 dark:text-red-400 font-medium text-lg">Delete Account</span>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Permanently delete your account</p>
-                  </div>
-                  <span className="text-red-400 group-hover:text-red-600 dark:group-hover:text-red-300">→</span>
-                </div>
-              </button>
-            </div>
-          </section>
+          </div>
         </div>
       </div>
 
-      {/* Enhanced Modals */}
+      {/* Modals */}
       {renderModal(
         showPasswordModal,
         "Change Password",
@@ -590,7 +744,7 @@ function Settings() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 outline-none"
               placeholder="Enter current password"
               value={currentPassword}
               onChange={e => setCurrentPassword(e.target.value)}
@@ -601,7 +755,7 @@ function Settings() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 outline-none"
               placeholder="Enter new password"
               value={newPassword}
               onChange={e => setNewPassword(e.target.value)}
@@ -613,7 +767,7 @@ function Settings() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm New Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 outline-none"
               placeholder="Confirm new password"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
@@ -631,17 +785,10 @@ function Settings() {
             </button>
             <button
               type="submit"
-              className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg px-6 py-3 font-medium transition-colors flex items-center"
+              className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white rounded-lg px-6 py-3 font-medium transition-colors"
               disabled={loading.password}
             >
-              {loading.password ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Saving...
-                </>
-              ) : (
-                'Change Password'
-              )}
+              {loading.password ? 'Saving...' : 'Change Password'}
             </button>
           </div>
         </form>
@@ -656,7 +803,7 @@ function Settings() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Email Address</label>
             <input
               type="email"
-              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 outline-none"
               placeholder="Enter new email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -667,7 +814,7 @@ function Settings() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-emerald-500 outline-none"
               placeholder="Enter current password"
               value={passwordForEmail}
               onChange={e => setPasswordForEmail(e.target.value)}
@@ -684,17 +831,10 @@ function Settings() {
             </button>
             <button
               type="submit"
-              className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg px-6 py-3 font-medium transition-colors flex items-center"
+              className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white rounded-lg px-6 py-3 font-medium transition-colors"
               disabled={loading.email}
             >
-              {loading.email ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Updating...
-                </>
-              ) : (
-                'Update Email'
-              )}
+              {loading.email ? 'Updating...' : 'Update Email'}
             </button>
           </div>
         </form>
@@ -705,7 +845,7 @@ function Settings() {
         "Delete Account",
         () => setShowDeleteModal(false),
         <div className="space-y-4">
-          <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
             <div className="flex items-start">
               <span className="text-red-600 dark:text-red-400 text-xl mr-3">⚠️</span>
               <div>
@@ -727,24 +867,17 @@ function Settings() {
               Cancel
             </button>
             <button
-              className="bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-lg px-6 py-3 font-medium transition-colors flex items-center"
+              className="bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-lg px-6 py-3 font-medium transition-colors"
               onClick={handleDeleteAccount}
               disabled={loading.delete}
             >
-              {loading.delete ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Deleting...
-                </>
-              ) : (
-                'Delete Account'
-              )}
+              {loading.delete ? 'Deleting...' : 'Delete Account'}
             </button>
           </div>
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }

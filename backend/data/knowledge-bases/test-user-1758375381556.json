@@ -1,0 +1,1050 @@
+{
+  "userId": "test-user-1758375381556",
+  "createdAt": "2025-09-20T13:36:32.890Z",
+  "lastUpdated": "2025-09-25T07:26:17.308Z",
+  "version": "1.6",
+  "data": {
+    "userProfile": {
+      "currentRole": "Software Engineer",
+      "experienceLevel": "entry",
+      "industry": "Software Development",
+      "location": null,
+      "careerGoals": [
+        {
+          "goal": "Learn AI/ML",
+          "timeframe": "short-term",
+          "confidence": 70,
+          "relatedSkills": [
+            "Python",
+            "TensorFlow",
+            "PyTorch",
+            "Machine Learning Algorithms"
+          ],
+          "marketDemand": "very high",
+          "status": "in progress"
+        }
+      ],
+      "skills": [
+        {
+          "name": "JavaScript",
+          "proficiency": 8,
+          "relevanceToGoals": 3,
+          "lastUsed": null
+        },
+        {
+          "name": "Node.js",
+          "proficiency": 7,
+          "relevanceToGoals": 3,
+          "lastUsed": null
+        },
+        {
+          "name": "Python",
+          "proficiency": 4,
+          "relevanceToGoals": 10,
+          "lastUsed": null
+        }
+      ],
+      "strengths": [
+        {
+          "area": "JavaScript/Node.js Development",
+          "evidence": [
+            "Current role as Software Engineer"
+          ],
+          "leverageOpportunities": [
+            "Contribute to open-source projects using AI/ML"
+          ]
+        }
+      ],
+      "growthAreas": [
+        {
+          "area": "AI/ML",
+          "impact": 9,
+          "resources": [
+            {
+              "type": "course",
+              "title": "Machine Learning",
+              "url": "https://www.coursera.org/specializations/machine-learning",
+              "estimatedHours": 100
+            },
+            {
+              "type": "course",
+              "title": "Deep Learning Specialization",
+              "url": "https://www.deeplearning.ai/",
+              "estimatedHours": 150
+            }
+          ]
+        },
+        {
+          "area": "Python Programming",
+          "impact": 8,
+          "resources": [
+            {
+              "type": "course",
+              "title": "Python for Data Science",
+              "url": "https://www.datacamp.com/tracks/python-for-data-science",
+              "estimatedHours": 50
+            }
+          ]
+        },
+        {
+          "area": "Remote Collaboration",
+          "impact": 7,
+          "resources": []
+        }
+      ]
+    },
+    "actionPlan": {
+      "timeHorizon": "90-day",
+      "priorities": [
+        {
+          "goal": "Learn foundational AI/ML concepts",
+          "whyImportant": "High demand for AI skills in software development; improves career prospects. Demand increased by 74% in the last year (LinkedIn Workforce Report 2024).",
+          "milestones": [
+            {
+              "description": "Complete introductory Python course",
+              "dueDate": "2024-01-31",
+              "successMetrics": [
+                "Completion certificate",
+                "Basic Python coding exercises"
+              ],
+              "tasks": [
+                {
+                  "action": "Enroll in Python for Data Science course (DataCamp)",
+                  "priority": 1,
+                  "timeRequired": "10 hours",
+                  "resources": [
+                    "https://www.datacamp.com/tracks/python-for-data-science"
+                  ],
+                  "dependencies": [],
+                  "status": "in progress"
+                }
+              ]
+            },
+            {
+              "description": "Complete introductory Machine Learning course",
+              "dueDate": "2024-03-31",
+              "successMetrics": [
+                "Completion certificate",
+                "Simple ML model implementation"
+              ],
+              "tasks": [
+                {
+                  "action": "Enroll in Machine Learning course (Coursera)",
+                  "priority": 1,
+                  "timeRequired": "20 hours/week for 5 weeks",
+                  "resources": [
+                    "https://www.coursera.org/specializations/machine-learning"
+                  ],
+                  "dependencies": [
+                    "Complete introductory Python course"
+                  ],
+                  "status": "in progress"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "marketInsights": {
+      "inDemandSkills": [
+        {
+          "skill": "Python",
+          "relevance": 10,
+          "salaryImpact": "high",
+          "learningPath": [
+            "Online courses (DataCamp, Coursera), books, personal projects"
+          ]
+        },
+        {
+          "skill": "Machine Learning",
+          "relevance": 10,
+          "salaryImpact": "high",
+          "learningPath": [
+            "Online courses (Coursera, edX), specialization programs, Kaggle competitions"
+          ]
+        },
+        {
+          "skill": "Deep Learning",
+          "relevance": 9,
+          "salaryImpact": "high",
+          "learningPath": [
+            "Deep Learning Specialization (deeplearning.ai), research papers, practical projects"
+          ]
+        },
+        {
+          "skill": "Remote Collaboration",
+          "relevance": 8,
+          "salaryImpact": "medium",
+          "learningPath": [
+            "Online courses, workshops, practice"
+          ]
+        }
+      ],
+      "industryTrends": [
+        {
+          "trend": "Increased use of AI/ML in software development",
+          "impact": "positive",
+          "timeframe": "immediate",
+          "actionItems": [
+            "Focus on acquiring AI/ML skills",
+            "Build a portfolio of AI/ML projects",
+            "Consider taking advanced AI/ML courses"
+          ],
+          "source": "LinkedIn Workforce Report 2024"
+        },
+        {
+          "trend": "Rise of Hybrid Work Models",
+          "impact": "positive",
+          "timeframe": "long-term",
+          "actionItems": [
+            "Improve remote collaboration skills",
+            "Optimize home workspace for productivity",
+            "Highlight remote work experience on resume",
+            "Develop strong written communication skills",
+            "Build a home office setup"
+          ],
+          "source": "Remote Work Report 2024, Buffer State of Remote Work 2023"
+        }
+      ]
+    },
+    "networkingStrategy": {
+      "targetCompanies": [
+        "Google",
+        "Amazon",
+        "Microsoft",
+        "Meta"
+      ],
+      "keyPeople": [],
+      "events": []
+    },
+    "personalBranding": {
+      "linkedinRecommendations": [],
+      "portfolioEnhancements": [
+        "Create a GitHub repository for AI/ML projects"
+      ],
+      "thoughtLeadership": []
+    },
+    "accountability": {
+      "metrics": [
+        {
+          "name": "Python Proficiency",
+          "currentValue": "Beginner",
+          "targetValue": "Intermediate",
+          "deadline": "2024-01-31"
+        },
+        {
+          "name": "Completed ML Courses",
+          "currentValue": 0,
+          "targetValue": 2,
+          "deadline": "2024-03-31"
+        }
+      ],
+      "checkInFrequency": "weekly",
+      "successCriteria": [
+        "Consistent progress on learning path",
+        "Completion of milestones"
+      ]
+    },
+    "lastUpdated": "2025-09-25T07:02:30.076Z",
+    "version": "1.6.0",
+    "sources": [
+      {
+        "title": "Remote Work Report 2024",
+        "url": null
+      },
+      {
+        "title": "LinkedIn Workforce Report",
+        "url": null
+      },
+      {
+        "title": "Buffer State of Remote Work 2023",
+        "url": null
+      }
+    ],
+    "researchData": [
+      {
+        "title": "Remote Work Trends",
+        "source": "Remote Work Report 2024",
+        "summary": "Hybrid work is becoming the new standard",
+        "relevance": "medium",
+        "date": "2025-09-20T13:36:32.898Z",
+        "impact": "More companies offering flexible work arrangements",
+        "actionItems": [
+          "Improve remote collaboration skills",
+          "Set up a productive home office"
+        ]
+      },
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-21T16:05:26.119Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-21T16:05:26.119Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      },
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-21T17:39:30.712Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-21T17:39:30.712Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      },
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-21T17:30:14.822Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-21T17:30:14.823Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      },
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-21T17:57:34.830Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-21T17:57:34.830Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      },
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-21T17:48:55.963Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-21T17:48:55.963Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      },
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-22T10:01:34.970Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-22T10:01:34.970Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      },
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-25T07:02:30.076Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-25T07:02:30.076Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      }
+    ],
+    "careerPath": {}
+  },
+  "metadata": {
+    "source": "gemini-1.5-flash",
+    "inputTokens": 1636,
+    "outputTokens": 867.75,
+    "modelParameters": {
+      "temperature": 0.3,
+      "maxOutputTokens": 8192
+    }
+  },
+  "lastUpdateType": "scheduled",
+  "updateHistory": [
+    {
+      "id": "update-1758375392898-sv5i5491",
+      "timestamp": "2025-09-20T13:36:46.154Z",
+      "version": "1.1",
+      "updateType": "incremental",
+      "durationMs": 13256,
+      "changes": [
+        {
+          "path": "userProfile.careerGoals.0.confidence",
+          "oldValue": 50,
+          "newValue": 60,
+          "type": "update"
+        },
+        {
+          "path": "userProfile.careerGoals.0.status",
+          "newValue": "in progress",
+          "type": "add"
+        },
+        {
+          "path": "userProfile.skills.2",
+          "newValue": {
+            "name": "Python",
+            "proficiency": 2,
+            "relevanceToGoals": 10,
+            "lastUsed": null
+          },
+          "type": "add"
+        },
+        {
+          "path": "userProfile.growthAreas.2",
+          "newValue": {
+            "area": "Remote Collaboration",
+            "impact": 5,
+            "resources": []
+          },
+          "type": "add"
+        },
+        {
+          "path": "actionPlan.priorities.0.milestones.0.tasks.0.status",
+          "newValue": "in progress",
+          "type": "add"
+        },
+        {
+          "path": "actionPlan.priorities.0.milestones.1.tasks.0.status",
+          "newValue": "in progress",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.inDemandSkills.3",
+          "newValue": {
+            "skill": "Remote Collaboration",
+            "relevance": 7,
+            "salaryImpact": "medium",
+            "learningPath": [
+              "Online courses, workshops, practice"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.industryTrends.1",
+          "newValue": {
+            "trend": "Rise of Hybrid Work Models",
+            "impact": "positive",
+            "timeframe": "long-term",
+            "actionItems": [
+              "Improve remote collaboration skills",
+              "Optimize home workspace for productivity"
+            ],
+            "source": "Remote Work Report 2024"
+          },
+          "type": "add"
+        },
+        {
+          "path": "lastUpdated",
+          "oldValue": "2023-11-20T16:00:00Z",
+          "newValue": "2023-11-21T16:00:00Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "newValue": "1.1.0",
+          "type": "add"
+        },
+        {
+          "path": "sources",
+          "newValue": [
+            {
+              "title": "Remote Work Report 2024",
+              "url": null
+            }
+          ],
+          "type": "add"
+        },
+        {
+          "path": "researchData",
+          "newValue": [
+            {
+              "title": "Remote Work Trends",
+              "source": "Remote Work Report 2024",
+              "summary": "Hybrid work is becoming the new standard",
+              "relevance": "medium",
+              "date": "2025-09-20T13:36:32.898Z",
+              "impact": "More companies offering flexible work arrangements",
+              "actionItems": [
+                "Improve remote collaboration skills",
+                "Set up a productive home office"
+              ]
+            }
+          ],
+          "type": "add"
+        },
+        {
+          "path": "careerPath",
+          "newValue": {},
+          "type": "add"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758470726119-k235f0e1",
+      "timestamp": "2025-09-21T16:05:43.689Z",
+      "version": "1.2",
+      "updateType": "scheduled",
+      "durationMs": 17570,
+      "changes": [
+        {
+          "path": "userProfile.careerGoals.0.confidence",
+          "oldValue": 60,
+          "newValue": 70,
+          "type": "update"
+        },
+        {
+          "path": "userProfile.careerGoals.0.marketDemand",
+          "oldValue": "high",
+          "newValue": "very high",
+          "type": "update"
+        },
+        {
+          "path": "userProfile.skills.2.proficiency",
+          "oldValue": 2,
+          "newValue": 4,
+          "type": "update"
+        },
+        {
+          "path": "userProfile.growthAreas.2.impact",
+          "oldValue": 5,
+          "newValue": 7,
+          "type": "update"
+        },
+        {
+          "path": "actionPlan.priorities.0.whyImportant",
+          "oldValue": "High demand for AI skills in software development; improves career prospects.",
+          "newValue": "High demand for AI skills in software development; improves career prospects. Demand increased by 74% in the last year (LinkedIn Workforce Report 2024).",
+          "type": "update"
+        },
+        {
+          "path": "marketInsights.inDemandSkills.3.relevance",
+          "oldValue": 7,
+          "newValue": 8,
+          "type": "update"
+        },
+        {
+          "path": "marketInsights.industryTrends.0.actionItems.2",
+          "newValue": "Consider taking advanced AI/ML courses",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.industryTrends.0.source",
+          "newValue": "LinkedIn Workforce Report 2024",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.industryTrends.1.actionItems.2",
+          "newValue": "Highlight remote work experience on resume",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.industryTrends.1.actionItems.3",
+          "newValue": "Develop strong written communication skills",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.industryTrends.1.actionItems.4",
+          "newValue": "Build a home office setup",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.industryTrends.1.source",
+          "oldValue": "Remote Work Report 2024",
+          "newValue": "Remote Work Report 2024, Buffer State of Remote Work 2023",
+          "type": "update"
+        },
+        {
+          "path": "lastUpdated",
+          "oldValue": "2023-11-21T16:00:00Z",
+          "newValue": "2023-11-22T16:00:00Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.1.0",
+          "newValue": "1.2.0",
+          "type": "update"
+        },
+        {
+          "path": "sources.1",
+          "newValue": {
+            "title": "LinkedIn Workforce Report",
+            "url": null
+          },
+          "type": "add"
+        },
+        {
+          "path": "sources.2",
+          "newValue": {
+            "title": "Buffer State of Remote Work 2023",
+            "url": null
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.1",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-21T16:05:26.119Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.2",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-21T16:05:26.119Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758476370712-grq94qw4",
+      "timestamp": "2025-09-21T17:42:17.161Z",
+      "version": "1.3",
+      "updateType": "scheduled",
+      "durationMs": 166449,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2023-11-22T16:00:00Z",
+          "newValue": "2025-09-21T17:45:00Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.2.0",
+          "newValue": "1.3.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.3",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-21T17:39:30.712Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.4",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-21T17:39:30.712Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.5",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-21T17:30:14.822Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.6",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-21T17:30:14.823Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758477454830-63e1lcec",
+      "timestamp": "2025-09-21T18:00:45.394Z",
+      "version": "1.4",
+      "updateType": "scheduled",
+      "durationMs": 190564,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-21T17:45:00Z",
+          "newValue": "2025-09-21T18:00:00Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.3.0",
+          "newValue": "1.4.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.7",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-21T17:57:34.830Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.8",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-21T17:57:34.830Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.9",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-21T17:48:55.963Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.10",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-21T17:48:55.963Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758535529310-4cq4pnk3",
+      "timestamp": "2025-09-22T10:08:09.877Z",
+      "version": "1.5",
+      "updateType": "scheduled",
+      "durationMs": 160567,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-21T18:00:00Z",
+          "newValue": "2025-09-22T10:01:34.970Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.4.0",
+          "newValue": "1.5.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.11",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-22T10:01:34.970Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.12",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-22T10:01:34.970Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758784877661-8iekpp34",
+      "timestamp": "2025-09-25T07:26:17.308Z",
+      "version": "1.6",
+      "updateType": "scheduled",
+      "durationMs": 299647,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-22T10:01:34.970Z",
+          "newValue": "2025-09-25T07:02:30.076Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.5.0",
+          "newValue": "1.6.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.13",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-25T07:02:30.076Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.14",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-25T07:02:30.076Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    }
+  ]
+}

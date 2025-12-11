@@ -18,22 +18,22 @@ class AIAgentService {
    */
   async processWebhookData(webhookData) {
     const { resume, userId, skills, experience, scrapedJobs, preferences } = webhookData;
-    
+
     console.log('[AI AGENT] Starting workflow for user:', userId);
-    
+
     try {
       // Branch 1: Resume & Cover Letter Refactor
       const refactorResults = await this.branch1_ResumeRefactor(resume, scrapedJobs[0]);
-      
+
       // Branch 2: Email Drafting (if user has Gmail connected)
       const emailResults = await this.branch2_EmailDrafting(refactorResults, scrapedJobs[0]);
-      
+
       // Branch 3: Manual Apply Instructions
       const manualResults = await this.branch3_ManualApply(scrapedJobs[0], refactorResults);
-      
+
       // Generate compatibility score and feedback
       const compatibilityResults = await this.generateCompatibilityScore(resume, scrapedJobs[0], skills);
-      
+
       return {
         success: true,
         branches: {
@@ -45,7 +45,7 @@ class AIAgentService {
         monetizationGates: this.checkMonetizationGates(userId),
         nextSteps: this.generateNextSteps(refactorResults, emailResults, manualResults)
       };
-      
+
     } catch (error) {
       console.error('[AI AGENT] Workflow error:', error);
       return {
@@ -61,20 +61,20 @@ class AIAgentService {
    */
   async branch1_ResumeRefactor(resume, jobData) {
     console.log('[AI AGENT] Branch 1: Resume Refactoring');
-    
+
     const jobDescription = jobData?.description || '';
     const companyName = jobData?.company || '';
     const jobTitle = jobData?.title || '';
-    
+
     // Analyze resume for job match
     const analysis = await analyzeResumeForJob(resume, jobDescription);
-    
+
     // Refactor resume with AI
     const refactoredResume = await refactorResume(resume, jobDescription, 'modern');
-    
+
     // Generate cover letter
     const coverLetter = await generateCoverLetter(resume, jobDescription, companyName, jobTitle, 'standard');
-    
+
     // Generate PDFs
     const resumePDF = await PDFGeneratorService.generateResumePDF({
       personalInfo: {
@@ -88,7 +88,7 @@ class AIAgentService {
       education: [],
       skills: analysis.matchingSkills
     }, 'modern');
-    
+
     const coverLetterPDF = await PDFGeneratorService.generateCoverLetterPDF({
       date: new Date().toLocaleDateString(),
       recipientName: 'Hiring Manager',
@@ -100,7 +100,7 @@ class AIAgentService {
       senderEmail: 'your.email@example.com',
       senderPhone: 'Your Phone'
     });
-    
+
     return {
       analysis,
       refactoredResume: refactoredResume.refactoredResume,
@@ -120,13 +120,13 @@ class AIAgentService {
    */
   async branch2_EmailDrafting(refactorResults, jobData) {
     console.log('[AI AGENT] Branch 2: Email Drafting');
-    
+
     const { refactoredResume, coverLetter, pdfs } = refactorResults;
     const { company, title, url } = jobData;
-    
+
     // Check if user has Gmail connected
     const hasGmailAccess = false; // TODO: Check user's Gmail connection
-    
+
     if (!hasGmailAccess) {
       return {
         available: false,
@@ -134,13 +134,13 @@ class AIAgentService {
         setupRequired: true
       };
     }
-    
+
     // Draft email content
     const emailContent = await this.draftEmailContent(refactoredResume, coverLetter, jobData);
-    
+
     // Generate email subject
     const emailSubject = `Application for ${title} position - [Your Name]`;
-    
+
     return {
       available: true,
       emailContent,
@@ -157,16 +157,16 @@ class AIAgentService {
    */
   async branch3_ManualApply(jobData, refactorResults) {
     console.log('[AI AGENT] Branch 3: Manual Apply');
-    
+
     const { url, company, title, description } = jobData;
     const { analysis } = refactorResults;
-    
+
     // Generate application instructions
     const instructions = await this.generateApplicationInstructions(jobData, analysis);
-    
+
     // Calculate compatibility score
     const compatibilityScore = analysis.matchPercentage;
-    
+
     return {
       jobUrl: url,
       company,
@@ -182,19 +182,6 @@ class AIAgentService {
 
   /**
    * Generate compatibility score and feedback
-   */
-  async generateCompatibilityScore(resume, jobData, userSkills) {
-    const jobDescription = jobData?.description || '';
-    const analysis = await analyzeResumeForJob(resume, jobDescription);
-    
-    const feedback = await this.openai.chat.completions.create({
-      model: "tngtech/deepseek-r1t2-chimera:free",
-      messages: [
-        {
-          role: "system",
-          content: "You are a career coach providing feedback on job applications."
-        },
-        {
           role: "user",
           content: `Analyze this job application and provide feedback:
           
@@ -229,7 +216,7 @@ class AIAgentService {
   checkMonetizationGates(userId) {
     // TODO: Check user's subscription plan
     const userPlan = 'free'; // Mock for now
-    
+
     return {
       plan: userPlan,
       gates: {
@@ -248,7 +235,7 @@ class AIAgentService {
    */
   generateNextSteps(refactorResults, emailResults, manualResults) {
     const steps = [];
-    
+
     if (refactorResults.userConsentRequired) {
       steps.push({
         action: 'review_resume',
@@ -257,7 +244,7 @@ class AIAgentService {
         priority: 'high'
       });
     }
-    
+
     if (emailResults.available && emailResults.userConsentRequired) {
       steps.push({
         action: 'send_email',
@@ -266,7 +253,7 @@ class AIAgentService {
         priority: 'high'
       });
     }
-    
+
     if (manualResults.jobUrl) {
       steps.push({
         action: 'manual_apply',
@@ -275,7 +262,7 @@ class AIAgentService {
         priority: 'medium'
       });
     }
-    
+
     return steps;
   }
 
@@ -284,7 +271,7 @@ class AIAgentService {
    */
   async draftEmailContent(refactoredResume, coverLetter, jobData) {
     const { company, title } = jobData;
-    
+
     return `Dear Hiring Manager,
 
 I am writing to express my interest in the ${title} position at ${company}.
@@ -304,7 +291,7 @@ Best regards,
    */
   async generateApplicationInstructions(jobData, analysis) {
     const { company, title, url } = jobData;
-    
+
     return `To apply for ${title} at ${company}:
 
 1. Click the job link: ${url}

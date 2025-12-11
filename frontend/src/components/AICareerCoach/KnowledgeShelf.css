@@ -1,0 +1,510 @@
+/* Knowledge Shelf - Premium 3D Book Styles - CLEAN UI */
+
+/* Global perspective container */
+.knowledge-shelf-container {
+  perspective: 2000px;
+  perspective-origin: 50% 60%;
+}
+
+/* Bookshelf area - Transparent Clean Background */
+.bookshelf-bg {
+  background: transparent;
+  padding: 40px 20px 60px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* The physical shelf line that books sit on to ground them */
+.bookshelf-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 60px;
+  /* Aligned with bottom of books */
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: #e2e8f0;
+  /* Slate-200 */
+  border-radius: 4px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(255, 255, 255, 0.5);
+  z-index: -1;
+  transform-style: preserve-3d;
+  transform: translateZ(-20px);
+}
+
+/* Dark mode shelf */
+.dark .bookshelf-bg::after {
+  background: #334155;
+  /* Slate-700 */
+  box-shadow:
+    0 4px 10px -1px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.05);
+}
+
+/* Section Title */
+.shelf-title {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.shelf-title::before,
+.shelf-title::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+}
+
+.dark .shelf-title::before,
+.dark .shelf-title::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.shelf-title::before {
+  right: calc(50% + 140px);
+}
+
+.shelf-title::after {
+  left: calc(50% + 140px);
+}
+
+.shelf-title h2 {
+  color: #1e293b;
+  /* Slate-800 */
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.dark .shelf-title h2 {
+  color: #f1f5f9;
+  /* Slate-100 */
+}
+
+/* Book Container - TALL AND THIN */
+.book-3d-container {
+  position: relative;
+  width: 70px;
+  height: 320px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  flex-shrink: 0;
+  /* Lift books slightly off the shelf line */
+  margin-bottom: 20px;
+}
+
+/* Expanded book (open state) - wider */
+.book-3d-container.expanded {
+  width: 220px;
+}
+
+.book-3d-container:hover:not(.expanded) {
+  transform: translateY(-15px) rotateY(-8deg);
+  z-index: 20;
+}
+
+.book-3d-container.expanded {
+  transform: translateY(-20px);
+  z-index: 30;
+}
+
+/* The Book itself */
+.book-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(-5deg);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.book-3d-container:hover .book-3d {
+  transform: rotateY(-15deg);
+}
+
+.book-3d-container.expanded .book-3d {
+  transform: rotateY(0deg);
+}
+
+/* Book Spine - THE MAIN VISIBLE PART */
+.book-3d-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--book-color);
+  transform: translateZ(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset -8px 0 25px rgba(0, 0, 0, 0.4),
+    inset 4px 0 15px rgba(255, 255, 255, 0.05),
+    4px 0 20px rgba(0, 0, 0, 0.2);
+  /* Reduced shadow intensity */
+  border-radius: 2px 6px 6px 2px;
+  transition: all 0.5s ease;
+}
+
+/* Spine top and bottom decorative bars */
+.book-3d-spine::before,
+.book-3d-spine::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.book-3d-spine::before {
+  top: 20px;
+}
+
+.book-3d-spine::after {
+  bottom: 20px;
+}
+
+.book-3d-spine h4 {
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  max-height: 280px;
+  overflow: hidden;
+  opacity: 0.95;
+}
+
+/* Hide spine when expanded */
+.book-3d-container.expanded .book-3d-spine {
+  opacity: 0;
+  transform: translateZ(15px) rotateY(-90deg);
+}
+
+/* Book Cover - Shows when expanded */
+.book-3d-cover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--book-color);
+  transform: translateZ(15px);
+  border-radius: 2px 6px 6px 2px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 24px;
+  color: white;
+  box-shadow:
+    8px 8px 30px rgba(0, 0, 0, 0.3),
+    inset 0 0 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+
+.book-3d-container.expanded .book-3d-cover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Cover binding edge */
+.book-3d-cover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      transparent 100%);
+}
+
+/* Book pages (right side) */
+.book-3d-pages {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 30px;
+  transform: rotateY(90deg) translateZ(35px) translateX(15px);
+  transform-origin: left center;
+  background: linear-gradient(90deg,
+      #f8fafc 0%,
+      #e2e8f0 10%,
+      #f8fafc 20%,
+      #e2e8f0 30%,
+      #f8fafc 40%,
+      #e2e8f0 50%,
+      #f8fafc 60%,
+      #e2e8f0 70%,
+      #f8fafc 80%,
+      #e2e8f0 90%,
+      #f8fafc 100%);
+  /* Lighter, cleaner page color */
+  box-shadow:
+    inset 0 0 5px rgba(0, 0, 0, 0.05),
+    2px 0 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0 2px 2px 0;
+  transition: width 0.5s ease;
+}
+
+.book-3d-container.expanded .book-3d-pages {
+  width: 30px;
+  transform: rotateY(90deg) translateZ(110px) translateX(15px);
+}
+
+/* Top edge of book */
+.book-3d-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 30px;
+  transform: rotateX(90deg) translateZ(0px) translateY(-15px);
+  transform-origin: bottom center;
+  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+  border-radius: 2px;
+}
+
+/* Bottom edge of book */
+.book-3d-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30px;
+  transform: rotateX(-90deg) translateZ(0px) translateY(15px);
+  transform-origin: top center;
+  background: linear-gradient(0deg, #cbd5e1 0%, #e2e8f0 100%);
+  border-radius: 2px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Cover content styling */
+.cover-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.cover-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.cover-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 1.5;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.cover-stats {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cover-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+}
+
+/* Item count badge */
+.book-item-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  min-width: 24px;
+  height: 24px;
+  background: #ef4444;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 7px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(239, 68, 68, 0.4);
+  z-index: 10;
+  transform: translateZ(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover glow - reduced for clean UI */
+.book-3d-container::before {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  width: 80%;
+  height: 30px;
+  transform: translateX(-50%) translateZ(-20px);
+  background: radial-gradient(ellipse, var(--book-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.book-3d-container:hover::before,
+.book-3d-container.expanded::before {
+  opacity: 0.4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .book-3d-container {
+    width: 55px;
+    height: 260px;
+  }
+
+  .book-3d-container.expanded {
+    width: 180px;
+  }
+
+  .book-3d-spine h4 {
+    font-size: 10px;
+  }
+
+  .bookshelf-bg {
+    padding: 20px 0 40px;
+  }
+
+  .bookshelf-bg::after {
+    bottom: 40px;
+  }
+
+  .shelf-title::before,
+  .shelf-title::after {
+    width: 40px;
+  }
+
+  .shelf-title::before {
+    right: calc(50% + 100px);
+  }
+
+  .shelf-title::after {
+    left: calc(50% + 100px);
+  }
+}
+
+@media (max-width: 480px) {
+  .book-3d-container {
+    width: 45px;
+    height: 220px;
+  }
+
+  .book-3d-container.expanded {
+    width: 160px;
+  }
+
+  .book-3d-spine h4 {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .cover-title {
+    font-size: 16px;
+  }
+
+  .cover-subtitle {
+    font-size: 10px;
+  }
+}
+
+/* Skeleton loading */
+.book-skeleton .book-3d-spine {
+  background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.dark .book-skeleton .book-3d-spine {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+}
+
+@keyframes skeleton-pulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Dark mode page colors */
+.dark .book-3d-pages {
+  background: linear-gradient(90deg,
+      #334155 0%, #475569 10%, #334155 20%,
+      #475569 30%, #334155 40%, #475569 50%,
+      #334155 60%, #475569 70%, #334155 80%,
+      #475569 90%, #334155 100%);
+}
+
+.dark .book-3d-top,
+.dark .book-3d-bottom {
+  background: linear-gradient(180deg, #475569 0%, #334155 100%);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

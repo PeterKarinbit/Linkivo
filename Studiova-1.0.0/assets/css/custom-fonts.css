@@ -1,0 +1,122 @@
+/* Custom Styles for Linkivo */
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* Account for fixed header */
+}
+
+/* Futuristic Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  border-radius: 5px;
+}
+
+/* Base font size increase - subtle but noticeable */
+html {
+  font-size: 18px; /* Increased from default 16px */
+}
+
+/* Adjust specific text elements */
+body {
+  font-size: 1rem; /* Now equals 18px */
+  line-height: 1.7; /* Better readability */
+}
+
+/* Paragraph text */
+p {
+  font-size: 1.1rem; /* ~20px */
+}
+
+/* Small descriptive text */
+.fs-5 {
+  font-size: 1.15rem !important; /* ~21px, was too small */
+}
+
+/* Subheadings and important copy */
+.fs-4 {
+  font-size: 1.4rem !important; /* ~25px */
+}
+
+/* Navigation and UI text */
+.header-link,
+.btn-text,
+.nav-link {
+  font-size: 1rem; /* 18px - comfortable for UI */
+}
+
+/* Form inputs */
+.form-control {
+  font-size: 1rem; /* 18px - easier to read while typing */
+  padding: 0.75rem 0; /* Slightly more padding */
+}
+
+/* Hero headline - slight bump */
+.fs-16 {
+  font-size: 4.5rem !important; /* Increased from likely 4rem */
+}
+
+/* Section headings */
+h2 {
+  font-size: 2.5rem; /* ~45px - was probably too small */
+}
+
+h3 {
+  font-size: 1.75rem; /* ~31px */
+}
+
+h4 {
+  font-size: 1.4rem; /* ~25px */
+}
+
+/* Card body text */
+.card-body p {
+  font-size: 1.05rem; /* Slightly bigger than default */
+}
+
+/* Smooth Transitions */
+[data-aos] {
+  transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Hover Effects */
+.btn, .nav-link, .card, .form-control {
+  transition: all 0.3s ease-in-out;
+}
+
+.btn:hover, .nav-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Section Transitions */
+section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile adjustments - keep proportional */
+@media (max-width: 768px) {
+  html {
+    font-size: 16px; /* Slightly smaller on mobile to fit content */
+  }
+  
+  .fs-16 {
+    font-size: 3rem !important; /* Scaled down for mobile */
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+}

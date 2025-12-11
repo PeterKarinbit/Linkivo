@@ -52,6 +52,11 @@ const subscriptionSchema = new Schema(
         limit: { type: Number, default: 0 }, // Free tier default
         resetDate: { type: Date, default: Date.now },
       },
+      careerMemories: {
+        used: { type: Number, default: 0 },
+        limit: { type: Number, default: 20 }, // Free tier default
+        resetDate: { type: Date, default: Date.now },
+      },
     },
     // Payment details
     paymentMethod: {
@@ -67,7 +72,6 @@ const subscriptionSchema = new Schema(
 );
 
 // Index for efficient queries
-subscriptionSchema.index({ userId: 1 });
 subscriptionSchema.index({ status: 1, currentPeriodEnd: 1 });
 
 // Method to check if subscription is active
@@ -82,16 +86,19 @@ subscriptionSchema.methods.getPlanLimits = function () {
       resumeScoringCards: 3,
       jobRecommendations: 10,
       autonomousApplications: 0,
+      careerMemories: 20,
     },
     starter: {
       resumeScoringCards: 20,
       jobRecommendations: 50,
       autonomousApplications: 25,
+      careerMemories: 200,
     },
     pro: {
       resumeScoringCards: -1, // Unlimited
       jobRecommendations: -1, // Unlimited
       autonomousApplications: -1, // Unlimited
+      careerMemories: -1, // Unlimited
     },
   };
   

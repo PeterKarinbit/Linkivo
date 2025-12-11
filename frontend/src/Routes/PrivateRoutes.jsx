@@ -1,23 +1,21 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { setLoadingFalse } from "../store/authSlice";
 
 function PrivateRoutes({ children }) {
   const { status, userData, isLoading } = useSelector((store) => store.auth);
-  const dispatch = useDispatch();
-  //
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (isLoading) {
-        dispatch(setLoadingFalse());
-      }
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, [isLoading, dispatch]);
+  const hasToken = typeof window !== 'undefined' && !!localStorage.getItem('accessToken');
 
   if (isLoading) {
+    return (
+      <div className="flex justify-center items-center text-gray-600 h-screen">
+        Loading...
+      </div>
+    );
+  }
+
+  // If we have a token but userData isn't loaded yet, wait instead of redirecting
+  if (!userData && hasToken) {
     return (
       <div className="flex justify-center items-center text-gray-600 h-screen">
         Loading...

@@ -1,5 +1,20 @@
 import express from 'express';
+import { verifyJWT } from '../middlewares/auth.middleware.js';
 const router = express.Router();
+
+// Disable or guard debug routes in production
+router.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    return verifyJWT(req, res, (err) => {
+      if (err) return res.status(401).json({ success: false, message: 'Unauthorized' });
+      if (req.user?.role !== 'admin') {
+        return res.status(403).json({ success: false, message: 'Forbidden' });
+      }
+      next();
+    });
+  }
+  next();
+});
 
 // Debug endpoint to see what n8n receives
 router.post('/debug-n8n', (req, res) => {

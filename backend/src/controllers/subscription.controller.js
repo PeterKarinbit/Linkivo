@@ -9,17 +9,31 @@ import { FeatureAccess, FEATURE_CONFIG } from "../utils/featureAccess.js";
 const getSubscriptionStatus = asyncHandler(async (req, res) => {
   const user = req.user;
   
-  let subscription = await Subscription.findOne({ userId: user._id });
+  console.warn('Subscription checks are currently disabled - returning active pro subscription');
   
-  if (!subscription) {
-    // Create default free subscription
-    subscription = await Subscription.create({
-      userId: user._id,
-      plan: "free",
-      status: "active",
-      currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-    });
-    
+  // Always return active pro subscription during development
+  let subscription = await Subscription.findOneAndUpdate(
+    { userId: user._id },
+    {
+      $setOnInsert: {
+        userId: user._id,
+        plan: "pro",
+        status: "active",
+        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
+        billingCycle: "monthly",
+        cancelAtPeriodEnd: false,
+        usage: {}
+      }
+    },
+    { 
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true 
+    }
+  );
+  
+  // Update user subscription reference if needed
+  if (!user.subscription || !user.subscription.equals(subscription._id)) {
     user.subscription = subscription._id;
     await user.save();
   }

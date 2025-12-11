@@ -21,27 +21,52 @@ export const userService = {
   uploadPortfolioFile,
   listPortfolioUploads,
   deletePortfolioUpload,
+  fetchLinkPreview,
+  analyzeUploadedFileAndRecommend,
+  changePassword,
+  updateEmail,
+  deleteAccount,
 };
 
 async function login(userData) {
-  return apiCall("post", "/users/login", userData);
+  const response = await apiCall("post", "/users/login", userData);
+
+  // Store tokens in localStorage if login successful
+  if (response.data?.accessToken) {
+    localStorage.setItem('accessToken', response.data.accessToken);
+  }
+  if (response.data?.refreshToken) {
+    localStorage.setItem('refreshToken', response.data.refreshToken);
+  }
+
+  return response;
 }
 
 async function signup(userData) {
-  return apiCall("post", "/users/signup", userData);
+  const response = await apiCall("post", "/users/signup", userData);
+
+  // Store tokens in localStorage if signup successful
+  if (response.data?.accessToken) {
+    localStorage.setItem('accessToken', response.data.accessToken);
+  }
+  if (response.data?.refreshToken) {
+    localStorage.setItem('refreshToken', response.data.refreshToken);
+  }
+
+  return response;
 }
 
 async function updateProfilePicture(file) {
   const formPayload = new FormData();
   formPayload.append("profilePicture", file);
-  return apiCall("post", "/users/profile-picture", formPayload, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  // Do not set Content-Type header manually; let axios set boundary
+  return apiCall("post", "/users/profile-picture", formPayload);
 }
 
 async function logout() {
+  // Clear tokens on logout
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
   return apiCall("get", "/users/logout");
 }
 
@@ -92,8 +117,7 @@ async function getPublicProfile(id) {
 
 async function analyzeDocument(file, jobDescription) {
   const formPayload = new FormData();
-  formPayload.append("file", file); // Backend expects 'file' for /users/resumes/upload-file
-  // jobDescription is not used in backend, but keep for future use if needed
+  formPayload.append("file", file);
   return apiCall("post", "/users/resumes/upload-file", formPayload, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -101,12 +125,18 @@ async function analyzeDocument(file, jobDescription) {
   });
 }
 
+async function analyzeUploadedFileAndRecommend(file) {
+  const formPayload = new FormData();
+  formPayload.append("file", file);
+  return apiCall("post", "/users/uploads/analyze", formPayload, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+}
+
 async function recommendJobs(userProfile, jobs) {
-  // /jobs/search expects a JobSearchRequest: { job_titles, country, date_posted, location }
-  // We'll map userProfile to this structure
   const payload = {
     job_titles: userProfile.skills && userProfile.skills.length > 0 ? userProfile.skills : [""],
-    country: "us", // Default, or map from userProfile if available
+    country: "us",
     date_posted: "all",
     location: userProfile.location || ""
   };
@@ -137,4 +167,21 @@ async function listPortfolioUploads() {
 
 async function deletePortfolioUpload(uploadId) {
   return apiCall("delete", `/users/profile/uploads/${uploadId}`);
+}
+
+async function fetchLinkPreview(url) {
+  return apiCall("post", "/link-preview", { url });
+}
+
+// Account management methods
+async function changePassword({ currentPassword, newPassword }) {
+  return apiCall("post", "/users/change-password", { currentPassword, newPassword });
+}
+
+async function updateEmail({ email, password }) {
+  return apiCall("post", "/users/update-email", { email, password });
+}
+
+async function deleteAccount() {
+  return apiCall("delete", "/users/account");
 }

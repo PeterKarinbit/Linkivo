@@ -53,7 +53,7 @@ Resume:
 ${resumeText}
 `;
   const refactorRes = await openai.chat.completions.create({
-    model: "tngtech/deepseek-r1t2-chimera:free",
+    model: "deepseek/deepseek-r1-distill-qwen-32b",
     messages: [
       { role: "system", content: "You are a professional resume editor." },
       { role: "user", content: refactorPrompt },
@@ -73,7 +73,7 @@ ${jobDescription}
 Please provide specific, actionable suggestions to improve the resume so it better matches the job description. Focus on missing skills, formatting, wording, and any other improvements that would increase the candidate's chances. Return your answer as a clear, numbered list.`;
 
   const suggestionRes = await openai.chat.completions.create({
-    model: "tngtech/deepseek-r1t2-chimera:free",
+    model: "deepseek/deepseek-r1-distill-qwen-32b",
     messages: [
       { role: "system", content: "You are a professional resume coach and recruiter." },
       { role: "user", content: suggestionPrompt },

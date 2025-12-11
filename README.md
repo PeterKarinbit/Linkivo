@@ -81,7 +81,7 @@ NEXT_PUBLIC_GEMINI_API_KEY=AIzaSyDUWch15btYySciiu4i4tQpDKV_kIFJFKE
 
 ```bash
 PORT=3000
-MONGODB_URL=mongodb+srv://jobPortal:TlfvkkZNkkoGWp0G@blog.dm0zbcz.mongodb.net
+MONGODB_URL=mongodb+srv://linkivoai_db_user:Karin%406397@linkivo.3kj02jj.mongodb.net/
 ACCESS_TOKEN_SECRET=3ba96ae11cb5c73c1312bf608d6604e7477cae33687f862a09a46deb0705c6e7
 ACCESS_TOKEN_EXPIRY=1d
 REFRESH_TOKEN_SECRET=71ff56fc082eeb9ef3c56c812d2919f4bf90cae24cbbb3421b6c5bfc81eba04c

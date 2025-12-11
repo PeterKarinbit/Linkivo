@@ -1,52 +1,67 @@
-import React, { useState } from "react";
+import React from "react";
 
 function EducationCard({ setShowAddEducation, setEducationFormData, edu }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const getFormattedDate = (dateString) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleString("default", { month: "short" }) +
-      " " +
-      date.getFullYear()
-    );
-  };
-
   const { institution, degree, fieldOfStudy, startYear, endYear } = edu;
 
-  const formattedStartYear = getFormattedDate(startYear + "-01");
-  const formattedEndYear = getFormattedDate(endYear + "-01");
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    // Handle YYYY-MM
+    const parts = dateString.toString().split("-");
+    if (parts.length >= 2) {
+      const d = new Date(parts[0], parseInt(parts[1]) - 1);
+      if (!isNaN(d.getTime())) {
+        return new Intl.DateTimeFormat("en-US", {
+          year: "numeric",
+          month: "short",
+        }).format(d);
+      }
+    }
+    // Handle just Year or other formats
+    return dateString;
+  };
+
+  const formattedStart = formatDate(startYear);
+  const formattedEnd = formatDate(endYear);
 
   const openEditForm = () => {
     setShowAddEducation(true);
     setEducationFormData(edu);
   };
+
   return (
-    <div className="border p-3.5 border-b-4 bg-gray-50 flex flex-col gap-3 rounded">
-      <div className="flex justify-between">
-        <div className="flex gap-6 text-sm">
-          <div className="h-12 w-12 overflow-hidden border rounded-md p-px">
-            <img src="https://wellfound.com/images/shared/nopic_college.png" />
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex justify-between items-start">
+        <div className="flex gap-4">
+          {/* Icon */}
+          <div className="flex-shrink-0">
+            <div className="h-12 w-12 rounded-lg border border-gray-200 dark:border-gray-600 bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+              <i className="fa-solid fa-graduation-cap text-blue-600 dark:text-blue-400 text-xl"></i>
+            </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <p className="font-medium">{institution}</p>
-            <p className="">
-              {fieldOfStudy}, {degree}
-            </p>
-            <p className="text-gray-500 text-sm">
-              {formattedStartYear} to {formattedEndYear}
-            </p>
-            {/* <p className="text-gray-500 text-sm">9.5 CGPA</p> */}
+
+          {/* Details */}
+          <div className="flex flex-col">
+            <h4 className="font-semibold text-gray-900 dark:text-white text-lg leading-tight">
+              {institution}
+            </h4>
+            <div className="text-gray-600 dark:text-gray-300 font-medium">
+              {degree} {fieldOfStudy && <span>• {fieldOfStudy}</span>}
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
+              <i className="fa-regular fa-calendar text-xs"></i>
+              <span>{formattedStart} – {formattedEnd}</span>
+            </div>
           </div>
         </div>
-        <div>
-          <span
-            className="text-sm text-gray-500 hover:cursor-pointer"
-            onClick={openEditForm}
-          >
-            Edit
-          </span>
-        </div>
+
+        {/* Edit Button */}
+        <button
+          onClick={openEditForm}
+          className="text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+          title="Edit Education"
+        >
+          <i className="fa-solid fa-pen-to-square"></i>
+        </button>
       </div>
     </div>
   );

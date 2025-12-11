@@ -1,0 +1,649 @@
+{
+  "userId": "68ce5bc0d065dc2b4a9a0a2e",
+  "createdAt": "2025-09-20T09:52:38.378Z",
+  "lastUpdated": "2025-09-25T12:18:50.124Z",
+  "version": "2.5",
+  "data": {
+    "userProfile": {
+      "currentRole": null,
+      "experienceLevel": "entry",
+      "industry": null,
+      "location": null,
+      "careerGoals": [],
+      "skills": [],
+      "strengths": [],
+      "growthAreas": []
+    },
+    "actionPlan": {
+      "timeHorizon": "90-day",
+      "priorities": [
+        {
+          "goal": "Identify target industry and roles",
+          "whyImportant": "Without a clear target, career development efforts lack focus.",
+          "milestones": [
+            {
+              "description": "Research potential industries and roles",
+              "dueDate": "2024-10-27",
+              "successMetrics": [
+                "List of 3-5 target industries",
+                "List of 5-10 target roles"
+              ],
+              "tasks": [
+                {
+                  "action": "Explore LinkedIn, Glassdoor, and industry websites",
+                  "priority": 1,
+                  "timeRequired": "10 hours",
+                  "resources": [
+                    "https://www.linkedin.com/",
+                    "https://www.glassdoor.com/"
+                  ],
+                  "dependencies": [],
+                  "status": "incomplete"
+                },
+                {
+                  "action": "Network with professionals in potential fields (informational interviews)",
+                  "priority": 2,
+                  "timeRequired": "5 hours",
+                  "resources": [
+                    "LinkedIn, professional networking events"
+                  ],
+                  "dependencies": [
+                    "List of 3-5 target industries"
+                  ],
+                  "status": "incomplete"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "goal": "Assess current skills and identify skill gaps",
+          "whyImportant": "Understanding strengths and weaknesses is crucial for targeted development.",
+          "milestones": [
+            {
+              "description": "Complete skills assessment",
+              "dueDate": "2024-11-10",
+              "successMetrics": [
+                "Completed skills inventory",
+                "List of 3-5 key skill gaps"
+              ],
+              "tasks": [
+                {
+                  "action": "Create a list of your skills and rate your proficiency (1-10)",
+                  "priority": 1,
+                  "timeRequired": "2 hours",
+                  "resources": [],
+                  "dependencies": [],
+                  "status": "incomplete"
+                },
+                {
+                  "action": "Research required skills for target roles",
+                  "priority": 2,
+                  "timeRequired": "5 hours",
+                  "resources": [
+                    "Job descriptions on LinkedIn, Glassdoor"
+                  ],
+                  "dependencies": [
+                    "List of 5-10 target roles"
+                  ],
+                  "status": "incomplete"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "marketInsights": {
+      "inDemandSkills": [
+        "AI and Machine Learning",
+        "Remote Collaboration Tools",
+        "Written Communication"
+      ],
+      "industryTrends": [
+        "High demand for AI skills (74% increase in the last year - LinkedIn Workforce Report)",
+        "Increased prevalence of remote work opportunities (98% of workers desire remote work - Buffer State of Remote Work 2023)",
+        "AI/ML skills showing 74% year-over-year growth in demand (LinkedIn Workforce Report)",
+        "Remote work preferences at 98% among professionals, creating new opportunities (Buffer State of Remote Work 2023)"
+      ]
+    },
+    "networkingStrategy": {
+      "targetCompanies": [],
+      "keyPeople": [],
+      "events": []
+    },
+    "personalBranding": {
+      "linkedinRecommendations": [],
+      "portfolioEnhancements": [],
+      "thoughtLeadership": []
+    },
+    "accountability": {
+      "metrics": [],
+      "checkInFrequency": "weekly",
+      "successCriteria": [
+        "Completion of milestones in action plan"
+      ]
+    },
+    "lastUpdated": "2025-09-25T12:17:16.004Z",
+    "version": "1.15.0",
+    "careerPath": {},
+    "recentJournalEntries": [],
+    "newSkills": [],
+    "completedGoals": [],
+    "updatedPreferences": {},
+    "researchData": [
+      {
+        "title": "AI Career Trends 2024",
+        "source": "LinkedIn Workforce Report",
+        "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+        "relevance": "high",
+        "date": "2025-09-25T12:17:16.004Z",
+        "impact": "High demand for AI skills in the job market",
+        "actionItems": [
+          "Consider taking advanced AI/ML courses",
+          "Work on AI projects to build portfolio",
+          "Network with AI professionals in your area"
+        ]
+      },
+      {
+        "title": "Remote Work Statistics",
+        "source": "Buffer State of Remote Work 2023",
+        "summary": "98% of workers want to work remotely at least some of the time",
+        "relevance": "medium",
+        "date": "2025-09-25T12:17:16.004Z",
+        "impact": "More companies offering remote positions",
+        "actionItems": [
+          "Highlight remote work experience on resume",
+          "Develop strong written communication skills",
+          "Build a home office setup"
+        ]
+      }
+    ],
+    "sources": [
+      "LinkedIn Workforce Report",
+      "Buffer State of Remote Work 2023"
+    ]
+  },
+  "metadata": {
+    "source": "gemini-1.5-flash",
+    "inputTokens": 1400,
+    "outputTokens": 497.75,
+    "modelParameters": {
+      "temperature": 0.3,
+      "maxOutputTokens": 8192
+    }
+  },
+  "lastUpdateType": "scheduled",
+  "updateHistory": [
+    {
+      "id": "update-1758472499003-cw0y7v8t",
+      "timestamp": "2025-09-21T16:35:09.836Z",
+      "version": "1.6",
+      "updateType": "scheduled",
+      "durationMs": 10833,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-21T16:04:31.718Z",
+          "newValue": "2025-09-21T17:04:31.718Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.5.0",
+          "newValue": "1.6.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-21T16:04:31.718Z",
+          "newValue": "2025-09-21T16:34:59.000Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-21T16:04:31.718Z",
+          "newValue": "2025-09-21T16:34:59.000Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758475814824-b39xw6eo",
+      "timestamp": "2025-09-21T17:32:18.079Z",
+      "version": "1.7",
+      "updateType": "scheduled",
+      "durationMs": 123255,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-21T17:04:31.718Z",
+          "newValue": "2025-09-21T17:30:14.823Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.6.0",
+          "newValue": "1.7.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-21T16:34:59.000Z",
+          "newValue": "2025-09-21T17:30:14.823Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-21T16:34:59.000Z",
+          "newValue": "2025-09-21T17:30:14.823Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.2",
+          "newValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-21T17:30:14.822Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "add"
+        },
+        {
+          "path": "researchData.3",
+          "newValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-21T17:30:14.823Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "add"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758476935965-nbxjdvie",
+      "timestamp": "2025-09-21T17:50:19.637Z",
+      "version": "1.8",
+      "updateType": "scheduled",
+      "durationMs": 83672,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-21T17:30:14.823Z",
+          "newValue": "2025-09-21T17:48:55.963Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.7.0",
+          "newValue": "1.8.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-21T17:30:14.823Z",
+          "newValue": "2025-09-21T17:48:55.963Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-21T17:30:14.823Z",
+          "newValue": "2025-09-21T17:48:55.963Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.2",
+          "oldValue": {
+            "title": "AI Career Trends 2024",
+            "source": "LinkedIn Workforce Report",
+            "summary": "Demand for AI and machine learning skills has increased by 74% in the last year",
+            "relevance": "high",
+            "date": "2025-09-21T17:30:14.822Z",
+            "impact": "High demand for AI skills in the job market",
+            "actionItems": [
+              "Consider taking advanced AI/ML courses",
+              "Work on AI projects to build portfolio",
+              "Network with AI professionals in your area"
+            ]
+          },
+          "type": "remove"
+        },
+        {
+          "path": "researchData.3",
+          "oldValue": {
+            "title": "Remote Work Statistics",
+            "source": "Buffer State of Remote Work 2023",
+            "summary": "98% of workers want to work remotely at least some of the time",
+            "relevance": "medium",
+            "date": "2025-09-21T17:30:14.823Z",
+            "impact": "More companies offering remote positions",
+            "actionItems": [
+              "Highlight remote work experience on resume",
+              "Develop strong written communication skills",
+              "Build a home office setup"
+            ]
+          },
+          "type": "remove"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758535296875-3vxldspz",
+      "timestamp": "2025-09-22T10:02:18.422Z",
+      "version": "1.9",
+      "updateType": "scheduled",
+      "durationMs": 41547,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-21T17:48:55.963Z",
+          "newValue": "2025-09-22T10:01:34.970Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.8.0",
+          "newValue": "1.9.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-21T17:48:55.963Z",
+          "newValue": "2025-09-22T10:01:34.970Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-21T17:48:55.963Z",
+          "newValue": "2025-09-22T10:01:34.970Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758606405078-u8gpoku1",
+      "timestamp": "2025-09-23T05:48:14.888Z",
+      "version": "2.0",
+      "updateType": "scheduled",
+      "durationMs": 89810,
+      "changes": [
+        {
+          "path": "marketInsights.inDemandSkills.1",
+          "newValue": "Remote Collaboration Tools",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.inDemandSkills.2",
+          "newValue": "Written Communication",
+          "type": "add"
+        },
+        {
+          "path": "marketInsights.industryTrends.2",
+          "oldValue": "High demand for AI skills in the job market (74% increase in the last year - LinkedIn Workforce Report)",
+          "newValue": "AI/ML skills showing 74% year-over-year growth in demand (LinkedIn Workforce Report)",
+          "type": "update"
+        },
+        {
+          "path": "marketInsights.industryTrends.3",
+          "oldValue": "More companies offering remote positions (98% of workers want to work remotely - Buffer State of Remote Work 2023)",
+          "newValue": "Remote work preferences at 98% among professionals, creating new opportunities (Buffer State of Remote Work 2023)",
+          "type": "update"
+        },
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-22T10:01:34.970Z",
+          "newValue": "2025-09-23T05:46:42.977Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.9.0",
+          "newValue": "1.10.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-22T10:01:34.970Z",
+          "newValue": "2025-09-23T05:46:42.977Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-22T10:01:34.970Z",
+          "newValue": "2025-09-23T05:46:42.977Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758724655560-u62cc4od",
+      "timestamp": "2025-09-24T14:38:53.512Z",
+      "version": "2.1",
+      "updateType": "scheduled",
+      "durationMs": 77952,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-23T05:46:42.977Z",
+          "newValue": "2025-09-24T14:37:34.707Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.10.0",
+          "newValue": "1.11.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-23T05:46:42.977Z",
+          "newValue": "2025-09-24T14:37:34.707Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-23T05:46:42.977Z",
+          "newValue": "2025-09-24T14:37:34.707Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758783752742-tc707qhs",
+      "timestamp": "2025-09-25T07:04:05.705Z",
+      "version": "2.2",
+      "updateType": "scheduled",
+      "durationMs": 92963,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-24T14:37:34.707Z",
+          "newValue": "2025-09-25T07:02:30.076Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.11.0",
+          "newValue": "1.12.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-24T14:37:34.707Z",
+          "newValue": "2025-09-25T07:02:30.076Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-24T14:37:34.707Z",
+          "newValue": "2025-09-25T07:02:30.076Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758802458571-fxv19ytj",
+      "timestamp": "2025-09-25T12:15:31.374Z",
+      "version": "2.3",
+      "updateType": "scheduled",
+      "durationMs": 72803,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-25T07:02:30.076Z",
+          "newValue": "2025-09-25T12:14:16.425Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.12.0",
+          "newValue": "1.13.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-25T07:02:30.076Z",
+          "newValue": "2025-09-25T12:14:16.425Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-25T07:02:30.076Z",
+          "newValue": "2025-09-25T12:14:16.425Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758802555267-emuvy5f4",
+      "timestamp": "2025-09-25T12:17:07.533Z",
+      "version": "2.4",
+      "updateType": "scheduled",
+      "durationMs": 72266,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-25T12:14:16.425Z",
+          "newValue": "2025-09-25T12:15:50.204Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.13.0",
+          "newValue": "1.14.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-25T12:14:16.425Z",
+          "newValue": "2025-09-25T12:15:50.204Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-25T12:14:16.425Z",
+          "newValue": "2025-09-25T12:15:50.204Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    },
+    {
+      "id": "update-1758802639505-exn1c1mo",
+      "timestamp": "2025-09-25T12:18:50.124Z",
+      "version": "2.5",
+      "updateType": "scheduled",
+      "durationMs": 90619,
+      "changes": [
+        {
+          "path": "lastUpdated",
+          "oldValue": "2025-09-25T12:15:50.204Z",
+          "newValue": "2025-09-25T12:17:16.004Z",
+          "type": "update"
+        },
+        {
+          "path": "version",
+          "oldValue": "1.14.0",
+          "newValue": "1.15.0",
+          "type": "update"
+        },
+        {
+          "path": "researchData.0.date",
+          "oldValue": "2025-09-25T12:15:50.204Z",
+          "newValue": "2025-09-25T12:17:16.004Z",
+          "type": "update"
+        },
+        {
+          "path": "researchData.1.date",
+          "oldValue": "2025-09-25T12:15:50.204Z",
+          "newValue": "2025-09-25T12:17:16.004Z",
+          "type": "update"
+        }
+      ],
+      "dataSnapshot": {
+        "goals": 0,
+        "skills": 0,
+        "insights": 0
+      }
+    }
+  ]
+}

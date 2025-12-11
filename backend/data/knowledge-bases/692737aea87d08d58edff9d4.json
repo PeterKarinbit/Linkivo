@@ -1,0 +1,41 @@
+{
+  "userId": "692737aea87d08d58edff9d4",
+  "createdAt": "2025-12-09T07:17:27.862Z",
+  "lastUpdated": "2025-12-09T07:17:27.862Z",
+  "version": "1.0.0",
+  "data": {
+    "userProfile": {
+      "skills": [],
+      "goals": [],
+      "status": "Data not provided"
+    },
+    "actionPlan": {
+      "objective": "Identify skills, goals, and market insights to create a personalized plan",
+      "strategy": "Gather user data and research market trends to develop a tailored strategy"
+    },
+    "marketInsights": {
+      "overview": "Market insights not provided",
+      "recommendation": "Research industry trends and job market demands"
+    },
+    "skillDevelopment": {
+      "currentSkills": [],
+      "recommendedSkills": [],
+      "status": "Information missing"
+    },
+    "actionableSteps": [
+      "Identify and list current skills and goals",
+      "Research market trends and insights relevant to your industry",
+      "Update your profile with the collected information"
+    ]
+  },
+  "metadata": {
+    "source": "deepseek/deepseek-r1-distill-qwen-32b",
+    "inputTokens": 115,
+    "outputTokens": 166,
+    "modelParameters": {
+      "temperature": 0.2,
+      "maxOutputTokens": 4096
+    }
+  },
+  "_dataLoaded": true
+}

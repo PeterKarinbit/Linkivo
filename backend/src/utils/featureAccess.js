@@ -34,6 +34,16 @@ export const FEATURE_CONFIG = {
       },
       requiresAuth: true,
     },
+    careerMemories: {
+      name: "Career Memories",
+      description: "LLM-synthesized memories from journals (vectorized)",
+      limits: {
+        free: 20,
+        starter: 200,
+        pro: -1,
+      },
+      requiresAuth: true,
+    },
     advancedAnalytics: {
       name: "Advanced Analytics",
       description: "Detailed career analytics and insights",

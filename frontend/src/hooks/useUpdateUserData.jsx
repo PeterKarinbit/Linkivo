@@ -13,11 +13,11 @@ const useUpdateUserData = () => {
     try {
       const userResponse = await userService.getCurrentUser();
       console.log('[useUpdateUserData] getCurrentUser response:', userResponse);
-      
+
       // Extract user data from response
       const userData = userResponse.data || userResponse;
       console.log('[useUpdateUserData] Extracted userData:', userData);
-      
+
       if (userData && userData.role) {
         dispatch(login({ userData }));
       } else {
@@ -26,7 +26,19 @@ const useUpdateUserData = () => {
       dispatch(setLoadingFalse());
     } catch (error) {
       console.error('[useUpdateUserData] Error:', error);
-      dispatch(logout());
+
+      // Check if it's likely a network/server issue (not an auth issue)
+      const isNetworkError = !error.response || error.response.status >= 500;
+
+      if (isNetworkError) {
+        // Trigger the NetworkError component
+        window.dispatchEvent(new Event('network-error'));
+        // Do NOT logout, keep the loading state or let it fail gracefully without clearing auth
+      } else {
+        // Only logout if it's a client/auth error (401, 403, 400)
+        dispatch(logout());
+      }
+
       dispatch(setLoadingFalse());
     } finally {
       setLoading(false);

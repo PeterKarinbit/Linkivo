@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import mammoth from 'mammoth';
 import pdfParse from 'pdf-parse';
-import n8nSessionHandler from '../utils/n8nSessionHandler.js';
+// Removed n8n session handler import - now using direct AI integration
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 import { requireFeatureAccess, trackFeatureUsage } from '../middlewares/featureAccess.middleware.js';
 
@@ -48,14 +48,17 @@ router.post('/analyze-resume',
       experience: req.body.experience,
     };
 
-    // Send to n8n with automatic session handling
-    const result = await n8nSessionHandler.sendToN8n(
-      'https://boetos.app.n8n.cloud/webhook-test/29c4ee18-de28-4fd7-960d-12bf6c803be1',
-      n8nData
-    );
+    // Direct AI analysis instead of n8n
+    const { default: EnhancedAICareerCoach } = await import('../utils/ai/enhancedAICareerCoach.service.js');
+    const aiCoach = new EnhancedAICareerCoach();
+    
+    const result = await aiCoach.analyzeResumeContent(text, req.body.userId, {
+      skills: req.body.skills,
+      experience: req.body.experience
+    });
 
-    console.log('[Resume Route] n8n response:', result);
-    res.json({ n8n: result });
+    console.log('[Resume Route] AI analysis response:', result);
+    res.json({ analysis: result });
   } catch (err) {
     console.error('Resume analysis error:', err);
     res.status(500).json({ error: 'Resume analysis failed' });

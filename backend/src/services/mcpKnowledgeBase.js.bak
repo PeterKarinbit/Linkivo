@@ -1,0 +1,141 @@
+import { promises as fs } from 'fs';
+import path from 'path';
+
+class MCPKnowledgeBaseService {
+  constructor() {
+    this.knowledgeBase = new Map();
+    this.storagePath = path.join(process.cwd(), 'data', 'knowledge-base');
+  }
+
+  /**
+   * Update the knowledge base for a user
+   * @param {string} userId - User ID
+   * @param {Object} userData - User data to update
+   * @param {string} updateType - Type of update ('full' or 'incremental')
+   * @returns {Promise<Object>} Updated knowledge base
+   */
+  async updateKnowledgeBase(userId, userData, updateType = 'incremental') {
+    try {
+      if (!userId) {
+        throw new Error('User ID is required');
+      }
+
+      // Load existing knowledge base or create new one
+      let kb = await this.loadKnowledgeBase(userId);
+      
+      if (!kb) {
+        // Create new knowledge base
+        kb = {
+          userId,
+          version: '1.0.0',
+          lastUpdated: new Date().toISOString(),
+          data: this.transformUserData(userData)
+        };
+      } else {
+        // Update existing knowledge base
+        const versionParts = kb.version ? kb.version.split('.').map(Number) : [1, 0, 0];
+        versionParts[1] += 1; // Increment minor version
+        
+        kb = {
+          ...kb,
+          version: versionParts.join('.'),
+          lastUpdated: new Date().toISOString(),
+          data: updateType === 'full' 
+            ? this.transformUserData(userData)
+            : {
+                ...kb.data,
+                ...this.transformUserData(userData)
+              }
+        };
+      }
+
+      // Save the updated knowledge base
+      await this.saveKnowledgeBase(userId, kb);
+      return kb;
+    } catch (error) {
+      console.error(`Error updating knowledge base for user ${userId}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Transform user data into knowledge base format
+   * @private
+   */
+  transformUserData(userData) {
+    if (!userData) return {};
+    
+    return {
+      userProfile: {
+        username: userData.username || '',
+        email: userData.email || '',
+        role: userData.role || 'user',
+        ...(userData.userProfile || {})
+      },
+      preferences: {
+        aiCoach: userData.aiCoachConsent || {},
+        schedule: userData.aiCoachConsent?.schedule || {}
+      },
+      lastUpdated: new Date().toISOString()
+    };
+  }
+
+  /**
+   * Load knowledge base from storage
+   * @private
+   */
+  async loadKnowledgeBase(userId) {
+    try {
+      const filePath = path.join(this.storagePath, `${userId}.json`);
+      const data = await fs.readFile(filePath, 'utf-8');
+      return JSON.parse(data);
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return null; // File doesn't exist yet
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Save knowledge base to storage
+   * @private
+   */
+  async saveKnowledgeBase(userId, data) {
+    try {
+      // Ensure directory exists
+      await fs.mkdir(this.storagePath, { recursive: true });
+      
+      const filePath = path.join(this.storagePath, `${userId}.json`);
+      await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+      
+      // Update in-memory cache
+      this.knowledgeBase.set(userId, data);
+    } catch (error) {
+      console.error(`Error saving knowledge base for user ${userId}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get knowledge base for a user
+   * @param {string} userId - User ID
+   * @returns {Promise<Object|null>} User's knowledge base or null if not found
+   */
+  async getKnowledgeBase(userId) {
+    // Check in-memory cache first
+    if (this.knowledgeBase.has(userId)) {
+      return this.knowledgeBase.get(userId);
+    }
+
+    // Load from storage if not in cache
+    const kb = await this.loadKnowledgeBase(userId);
+    if (kb) {
+      this.knowledgeBase.set(userId, kb);
+    }
+    return kb;
+  }
+}
+
+// Export a singleton instance
+export default new MCPKnowledgeBaseService();

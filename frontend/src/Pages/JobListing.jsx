@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { FaRobot, FaFileUpload, FaCog, FaChartBar, FaSearch, FaSpinner, FaArrowRight, FaArrowLeft, FaCheck, FaUpload, FaMapMarkerAlt, FaMoneyBillWave, FaExternalLinkAlt, FaBuilding, FaGlobe, FaBriefcase, FaUserTie, FaTimes, FaChevronDown, FaChevronUp, FaFilter, FaSortAmountDown } from "react-icons/fa";
 import { MdWorkOutline, MdOutlineLocationOn, MdAttachMoney, MdOutlineBusinessCenter } from "react-icons/md";
-import { triggerN8nWorkflow } from "../services/n8nService";
+// Removed n8n service import - now using direct AI integration
 import { contentService } from "../services/contentService";
 import countries from '../data/countries.json';
 
@@ -523,8 +523,9 @@ function SkillGapAnalyzer() {
         autoRefactor: false,
       };
 
-      const result = await triggerN8nWorkflow(analysisData);
-      console.log("n8n workflow result:", result);
+      // Direct AI analysis instead of n8n workflow
+      const result = await contentService.analyzeSkillGap(analysisData);
+      console.log("AI analysis result:", result);
 
       setSkillGapResults(result);
       setScrapingProgress("Skill gap analysis complete!");

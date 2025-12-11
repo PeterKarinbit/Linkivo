@@ -25,6 +25,33 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Set your Pusher Beams instance ID -->
+    <script>
+      window.__BEAMS_INSTANCE_ID__ = '447d23b3-ff65-4233-9811-72011386e547';
+    </script>
+    <!-- Paystack Inline JS -->
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+    <!-- Pusher Beams SDK -->
+    <script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
+    <script>
+      (function registerBeams(){
+        if (!('serviceWorker' in navigator) || !window.PusherPushNotifications) return;
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(async (registration) => {
+            const instanceId = window.__BEAMS_INSTANCE_ID__ || '';
+            if (!instanceId) return; // set this globally or via env-injected script
+            const beamsClient = new PusherPushNotifications.Client({ instanceId });
+            try {
+              await beamsClient.start();
+              await beamsClient.addDeviceInterest('hello');
+              console.log('Pusher Beams registered and subscribed');
+            } catch (e) {
+              console.warn('Beams init failed:', e?.message || e);
+            }
+          })
+          .catch(err => console.warn('SW registration failed:', err));
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -58,7 +58,7 @@ export async function refactorResume(originalResume, jobDescription, templateTyp
   const prompt = `${template.prompt}\n\nOriginal Resume:\n${originalResume}\n\nJob Description:\n${jobDescription}`;
 
   const completion = await openai.chat.completions.create({
-    model: "deepseek-ai/deepseek-coder-33b-instruct",
+    model: "deepseek/deepseek-chat-v3.1:free",
     messages: [{
       role: "user",
       content: prompt
@@ -86,7 +86,7 @@ export async function generateCoverLetter(resumeText, jobDescription, companyNam
   const prompt = `${template.prompt}\n\nWrite a professional cover letter for the following job:\n\nCompany: ${companyName}\nPosition: ${jobTitle}\n\nJob Description:\n${jobDescription}\n\nCandidate's Resume:\n${resumeText}\n\nRequirements:\n1. Professional and engaging tone\n2. Highlight relevant skills and experience\n3. Show enthusiasm for the role and company\n4. Include specific examples from the resume\n5. Standard business letter format`;
 
   const completion = await openai.chat.completions.create({
-    model: "deepseek-ai/deepseek-coder-33b-instruct",
+    model: "deepseek/deepseek-chat-v3.1:free",
     messages: [{
       role: "user",
       content: prompt
@@ -132,7 +132,7 @@ Provide analysis in the following format:
 - Key areas that need attention`;
 
   const completion = await openai.chat.completions.create({
-    model: "deepseek-ai/deepseek-coder-33b-instruct",
+    model: "deepseek/deepseek-chat-v3.1:free",
     messages: [{
       role: "user",
       content: prompt
