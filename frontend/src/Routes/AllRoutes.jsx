@@ -29,8 +29,8 @@ import PaymentSuccess from "../Pages/PaymentSuccess";
 import PaymentStatus from "../Pages/PaymentStatus";
 import PaymentCallback from "../Pages/PaymentCallback";
 import Contact from "../Pages/Contact";
-import CareerInsightsPage from "../pages/CareerInsightsPage";
-import CareerMemoriesTestPage from "../pages/test/CareerMemoriesTestPage";
+// import CareerInsightsPage from "../pages/CareerInsightsPage";
+// import CareerMemoriesTestPage from "../pages/test/CareerMemoriesTestPage";
 import AntigravityAuth from "../Pages/ClerkSignUpAntigravity";
 import ClerkSignIn from "../Pages/ClerkSignIn";
 import ClerkSignUp from "../Pages/ClerkSignUp";
@@ -91,14 +91,14 @@ function AllRoutes() {
           </PrivateRoutes>
         }
       />
-      <Route
+      {/* <Route
         path="/career-coach/insights"
         element={
           <PrivateRoutes>
             <CareerInsightsPage />
           </PrivateRoutes>
         }
-      />
+      /> */}
       <Route
         path="/career-coach-legacy"
         element={
@@ -169,7 +169,7 @@ function AllRoutes() {
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/test/career-memories" element={<CareerMemoriesTestPage />} />
+      {/* <Route path="/test/career-memories" element={<CareerMemoriesTestPage />} /> */}
       <Route
         path="/refer-friend"
         element={
