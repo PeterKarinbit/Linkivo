@@ -77,8 +77,8 @@
   </script>
 
   <link rel="shortcut icon" type="image/png" href="/assets/images/Linkivo.png" />
-  <link rel="stylesheet" href="/assets/libs/owl.carousel/dist/assets/owl.carousel.min.css">
-  <link rel="stylesheet" href="/assets/libs/aos-master/dist/aos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
   <link rel="stylesheet" href="/assets/css/styles.css" />
   <link rel="stylesheet" href="/assets/css/custom-fonts.css" />
   <!-- Font Awesome for social icons -->
@@ -737,13 +737,20 @@
     </button>
   </div>
 
-  <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/assets/libs/owl.carousel/dist/owl.carousel.min.js"></script>
-  <script src="/assets/libs/aos-master/dist/aos.js"></script>
-  <script src="/assets/js/custom.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <!-- <script src="/assets/js/custom.js"></script>  Commented out as potentially missing -->
   <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
-  <script src="/assets/js/scroll-animations.js"></script>
+  <!-- <script src="/assets/js/scroll-animations.js"></script> Commented out as potentially missing -->
+  <script>
+    // Initialize AOS
+    if (typeof AOS !== 'undefined') {
+      AOS.init();
+    }
+  </script>
 
   <script>
     // Scroll to top button

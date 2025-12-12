@@ -138,11 +138,201 @@ function LoginSignUp() {
   const { getToken } = useAuth();
   const { isLoaded, isSignedIn } = useUser();
 
-  // ... (rest of imports/hooks)
+  useEffect(() => {
+    setIsLogin(window.location.pathname !== "/signup");
+  }, [window.location.pathname]);
 
-  // ... (existing UseEffects)
+  // Ensure clean slate on mount
+  useEffect(() => {
+    const checkSession = async () => {
+      if (!isLoaded) return;
+      if (isSignedIn) {
+        console.log("User already signed in, redirecting to home...");
+        navigate("/home-logged-in");
+      }
+    };
+    checkSession();
+  }, [isLoaded, isSignedIn]);
 
-  // ... (existing Handlers)
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = () => {
+    if (verificationStep) {
+      handleVerifyEmail();
+    } else if (isLogin) {
+      handleLogin();
+    } else {
+      handleSignup();
+    }
+  };
+
+  const handleLogin = async () => {
+    if (!signInLoaded) return;
+    setLoading(true);
+    setErrorMessage("");
+    try {
+      const result = await signIn.create({
+        identifier: formData.email,
+        password: formData.password,
+      });
+
+      if (result.status === "complete") {
+        await setActiveSignIn({ session: result.createdSessionId });
+
+        let retries = 3;
+        let token = null;
+        while (retries > 0 && !token) {
+          token = await getToken();
+          if (!token) await new Promise(r => setTimeout(r, 500));
+          retries--;
+        }
+
+        if (token) {
+          localStorage.setItem("accessToken", token);
+          await updateUser();
+          navigate("/");
+        } else {
+          navigate("/");
+        }
+      } else {
+        setErrorMessage("Login incomplete. Check console.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      const msg = err.errors?.[0]?.message || "Invalid email or password";
+      if (err.errors?.[0]?.code === "form_password_incorrect") {
+        setErrorMessage("Incorrect password");
+      } else if (err.errors?.[0]?.code === "form_identifier_not_found") {
+        setErrorMessage("Account not found. Please Sign Up.");
+      } else {
+        setErrorMessage(msg);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignup = async () => {
+    if (!signUpLoaded) return;
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords don't match.");
+      return;
+    }
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      setTimeout(() => {
+        setLoading((current) => {
+          if (current) console.warn("Signup taking too long, resetting state.");
+          return false;
+        });
+      }, 15000);
+
+      const baseName = formData.email.split("@")[0].replace(/[^a-zA-Z0-9]/g, "");
+      const username = `${baseName}${Math.floor(Math.random() * 10000)}`;
+
+      const signUpResult = await signUp.create({
+        emailAddress: formData.email,
+        password: formData.password,
+        username: username,
+        firstName: formData.name.split(" ")[0],
+        lastName: formData.name.split(" ").slice(1).join(" ") || "",
+      });
+
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      setVerificationStep(true);
+    } catch (err) {
+      console.error("Signup error:", err);
+      setErrorMessage(err.errors?.[0]?.message || "Error creating account");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyEmail = async () => {
+    if (!signUpLoaded) return;
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const completeSignUp = await signUp.attemptEmailAddressVerification({
+        code: verificationCode,
+      });
+
+      if (completeSignUp.status === "complete") {
+        await setActiveSignUp({ session: completeSignUp.createdSessionId });
+
+        let retries = 3;
+        let token = null;
+        while (retries > 0 && !token) {
+          token = await getToken();
+          if (!token) await new Promise(r => setTimeout(r, 500));
+          retries--;
+        }
+
+        if (token) {
+          localStorage.setItem("accessToken", token);
+          await updateUser();
+          localStorage.removeItem('ivo-onboarding-step');
+          navigate("/user-onboarding");
+        } else {
+          localStorage.removeItem('ivo-onboarding-step');
+          navigate("/user-onboarding");
+        }
+      } else if (completeSignUp.status === "missing_requirements") {
+        setErrorMessage(`Registration incomplete. Missing requirements: ${completeSignUp.missingFields.join(", ")}`);
+      } else {
+        setErrorMessage("Verification incomplete.");
+      }
+    } catch (err) {
+      console.error("Verification error:", err);
+      setErrorMessage(err.errors?.[0]?.message || "Invalid code");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSocialAuth = async (strategy) => {
+    if (strategy === 'oauth_google') {
+      setShowDevPopup(true);
+      return;
+    }
+
+    if (!signInLoaded) return;
+    setLoading(true);
+    try {
+      await signIn.authenticateWithRedirect({
+        strategy: strategy,
+        redirectUrl: "/sso-callback",
+        redirectUrlComplete: "/",
+      });
+    } catch (err) {
+      console.error("Error signing in", err);
+      setErrorMessage("Error signing in with Google");
+      setLoading(false);
+    }
+  };
+
+  const toggleMode = () => {
+    if (isLogin) {
+      navigate("/signup");
+    } else {
+      navigate("/login");
+    }
+    setErrorMessage("");
+    setVerificationStep(false);
+    setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
 
   return (
     <div className="flex min-h-[100dvh] w-full bg-white overflow-y-auto lg:overflow-hidden">
@@ -320,7 +510,6 @@ function LoginSignUp() {
                   <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900" />
                   <span className="text-sm text-gray-600">Remember me</span>
                 </label>
-                {/* Forgot Password Removed */}
               </div>
             )}
 
