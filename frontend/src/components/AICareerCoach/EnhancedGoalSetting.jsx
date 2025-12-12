@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../services/apiBase';
 import { FaBullseye, FaRocket, FaChartBar, FaHandshake, FaLightbulb, FaUsers, FaClock, FaCheckCircle, FaExclamationTriangle, FaEdit } from 'react-icons/fa';
 import { useAuth } from '@clerk/clerk-react';
 
@@ -31,16 +32,10 @@ function EnhancedGoalSetting({ onComplete }) {
 
   const loadExistingGoals = async () => {
     try {
-      const token = await getToken();
-      const response = await fetch('/api/v1/enhanced-ai-career-coach/goals', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await api.get('/enhanced-ai-career-coach/goals');
 
-      if (response.ok) {
-        const responseData = await response.json();
+      if (response && response.success) {
+        const responseData = response;
         const data = responseData.data;
 
         if (data) {
@@ -69,17 +64,10 @@ function EnhancedGoalSetting({ onComplete }) {
   const loadMarketData = async () => {
     try {
       setIsLoading(true);
-      const token = await getToken();
-      const response = await fetch('/api/v1/enhanced-ai-career-coach/market-insights?category=skills&limit=10', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await api.get('/enhanced-ai-career-coach/market-insights?category=skills&limit=10');
 
-      if (response.ok) {
-        const data = await response.json();
-        setMarketData(data.data);
+      if (response && response.success) {
+        setMarketData(response.data);
       }
     } catch (error) {
       console.error('Failed to load market data:', error);
@@ -215,21 +203,15 @@ function EnhancedGoalSetting({ onComplete }) {
 
       // Send goals to enhanced API
       // Send goals to enhanced API
-      const token = await getToken();
-      const response = await fetch('/api/v1/enhanced-ai-career-coach/goals', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ careerGoals: formattedGoals })
+      const response = await api.post('/enhanced-ai-career-coach/goals', {
+        careerGoals: formattedGoals
       });
 
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.message || 'Failed to save goals');
+      if (!response.success && !response.data) {
+        throw new Error(response.message || 'Failed to save goals');
       }
+
+      const responseData = response; // apiBase returns { ..., data: ... } structure directly
 
       if (onComplete) {
         onComplete({ careerGoals: responseData.data });
