@@ -8,9 +8,9 @@ import { FeatureAccess, FEATURE_CONFIG } from "../utils/featureAccess.js";
 // Get user's subscription status
 const getSubscriptionStatus = asyncHandler(async (req, res) => {
   const user = req.user;
-  
+
   console.warn('Subscription checks are currently disabled - returning active pro subscription');
-  
+
   // Always return active pro subscription during development
   let subscription = await Subscription.findOneAndUpdate(
     { userId: user._id },
@@ -25,13 +25,13 @@ const getSubscriptionStatus = asyncHandler(async (req, res) => {
         usage: {}
       }
     },
-    { 
+    {
       upsert: true,
       new: true,
-      setDefaultsOnInsert: true 
+      setDefaultsOnInsert: true
     }
   );
-  
+
   // Update user subscription reference if needed
   if (!user.subscription || !user.subscription.equals(subscription._id)) {
     user.subscription = subscription._id;
@@ -72,7 +72,7 @@ const upgradeSubscription = asyncHandler(async (req, res) => {
   }
 
   let subscription = await Subscription.findOne({ userId: user._id });
-  
+
   if (!subscription) {
     // Create new subscription
     subscription = new Subscription({
@@ -94,7 +94,7 @@ const upgradeSubscription = asyncHandler(async (req, res) => {
   }
 
   await subscription.save();
-  
+
   // Update user subscription reference
   user.subscription = subscription._id;
   await user.save();
@@ -117,9 +117,9 @@ const upgradeSubscription = asyncHandler(async (req, res) => {
 // Cancel subscription
 const cancelSubscription = asyncHandler(async (req, res) => {
   const user = req.user;
-  
+
   const subscription = await Subscription.findOne({ userId: user._id });
-  
+
   if (!subscription) {
     throw new ApiError(404, "No subscription found");
   }
@@ -135,9 +135,9 @@ const cancelSubscription = asyncHandler(async (req, res) => {
 // Reactivate subscription
 const reactivateSubscription = asyncHandler(async (req, res) => {
   const user = req.user;
-  
+
   const subscription = await Subscription.findOne({ userId: user._id });
-  
+
   if (!subscription) {
     throw new ApiError(404, "No subscription found");
   }
@@ -153,33 +153,53 @@ const reactivateSubscription = asyncHandler(async (req, res) => {
 // Get feature usage
 const getFeatureUsage = asyncHandler(async (req, res) => {
   const user = req.user;
-  
-  const subscription = await Subscription.findOne({ userId: user._id });
-  
+
+  let subscription = await Subscription.findOne({ userId: user._id });
+
+  // Auto-create if missing (Safe fallback)
   if (!subscription) {
-    throw new ApiError(404, "No subscription found");
+    subscription = await Subscription.findOneAndUpdate(
+      { userId: user._id },
+      {
+        $setOnInsert: {
+          userId: user._id,
+          plan: "pro", // Default to pro for now to avoid friction
+          status: "active",
+          currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+          billingCycle: "monthly",
+          usage: {}
+        }
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
   }
 
   // Reset monthly usage if needed
-  await subscription.resetMonthlyUsage();
+  try {
+    await subscription.resetMonthlyUsage();
+  } catch (e) {
+    console.warn("Failed to reset monthly usage:", e);
+  }
 
   const usageData = {};
-  
-  Object.keys(FEATURE_CONFIG.features).forEach(featureName => {
-    const feature = FEATURE_CONFIG.features[featureName];
-    const planLimit = feature.limits[subscription.plan];
-    const currentUsage = subscription.usage[featureName]?.used || 0;
-    
-    usageData[featureName] = {
-      name: feature.name,
-      description: feature.description,
-      used: currentUsage,
-      limit: planLimit,
-      remaining: planLimit === -1 ? -1 : Math.max(0, planLimit - currentUsage),
-      canUse: FeatureAccess.canAccessFeature(subscription, featureName),
-      needsUpgrade: FeatureAccess.needsUpgrade(subscription, featureName),
-    };
-  });
+
+  if (FEATURE_CONFIG && FEATURE_CONFIG.features) {
+    Object.keys(FEATURE_CONFIG.features).forEach(featureName => {
+      const feature = FEATURE_CONFIG.features[featureName];
+      const planLimit = feature.limits[subscription.plan];
+      const currentUsage = subscription.usage?.[featureName]?.used || 0;
+
+      usageData[featureName] = {
+        name: feature.name,
+        description: feature.description,
+        used: currentUsage,
+        limit: planLimit,
+        remaining: planLimit === -1 ? -1 : Math.max(0, planLimit - currentUsage),
+        canUse: FeatureAccess.canAccessFeature(subscription, featureName),
+        needsUpgrade: FeatureAccess.needsUpgrade(subscription, featureName),
+      };
+    });
+  }
 
   return res.status(200).json(
     new ApiResponse(200, usageData, "Feature usage retrieved successfully")
@@ -189,7 +209,7 @@ const getFeatureUsage = asyncHandler(async (req, res) => {
 // Get upgrade suggestions for a specific feature
 const getUpgradeSuggestions = asyncHandler(async (req, res) => {
   const { featureName } = req.params;
-  
+
   if (!FEATURE_CONFIG.features[featureName]) {
     throw new ApiError(400, "Invalid feature name");
   }
@@ -229,7 +249,7 @@ const handlePaymentWebhook = asyncHandler(async (req, res) => {
   }
 
   let subscription = await Subscription.findOne({ userId });
-  
+
   if (!subscription) {
     subscription = new Subscription({
       userId,
