@@ -19,7 +19,20 @@ async function markRead(ids, userId) {
 }
 
 function subscribe({ userId, onEvent, onError }) {
-  const url = `${api_url}/api/v1/notifications/stream${userId ? `?userId=${encodeURIComponent(userId)}` : ""}`;
+  const token = localStorage.getItem('accessToken');
+  const qs = userId ? `?userId=${encodeURIComponent(userId)}` : "";
+  const authQs = token ? `${qs ? '&' : '?'}token=${encodeURIComponent(token)}` : qs;
+
+  // Ensure we don't have double '?' if only token is present
+  const finalQs = qs && token ? `${qs}&token=${encodeURIComponent(token)}` : (qs || (token ? `?token=${encodeURIComponent(token)}` : ''));
+
+  // Simplified logic: build params
+  const params = new URLSearchParams();
+  if (userId) params.append('userId', userId);
+  if (token) params.append('token', token);
+
+  const url = `${api_url}/api/v1/notifications/stream?${params.toString()}`;
+
   const source = new EventSource(url, { withCredentials: true });
   source.onmessage = (event) => {
     try {
