@@ -30,6 +30,7 @@ function EnhancedAICareerCoach() {
   });
   const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -222,25 +223,49 @@ function EnhancedAICareerCoach() {
     }
 
     return (
-      <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
-        <div className="fixed left-0 top-0 h-full z-50">
+      <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden relative">
+        {/* Mobile Toggle Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden fixed top-3 left-3 z-[60] w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 text-slate-600 dark:text-slate-300"
+        >
+          <i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
+        </button>
+
+        {/* Sidebar Container */}
+        <div className={`fixed left-0 top-0 h-full z-50 transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <CanvaSidebar
             navigationItems={navigationItems}
             activeTab={currentStep}
-            onTabChange={navigateToStep}
+            onTabChange={(step) => {
+              navigateToStep(step);
+              setIsMobileMenuOpen(false); // Close mobile menu on navigate
+            }}
             isOpen={isSidebarOpen}
             setIsOpen={setIsSidebarOpen}
-            onNavigate={navigateToStep}
+            onNavigate={(step) => {
+              navigateToStep(step);
+              setIsMobileMenuOpen(false); // Close mobile menu on sub-navigate
+            }}
           />
         </div>
+
+        {/* Main Content Area */}
         <div
-          className={`flex-1 overflow-y-auto h-full transition-all duration-300 ease-in-out ${isSidebarOpen ? 'ml-[352px]' : 'ml-[72px]'
-            }`}
+          className={`flex-1 overflow-y-auto h-full transition-all duration-300 ease-in-out ml-0 ${isSidebarOpen ? 'md:ml-[380px]' : 'md:ml-[80px]'}`}
         >
           <div className="p-0">
             {renderStepContent()}
           </div>
         </div>
+
+        {/* Mobile Overlay Backdrop */}
+        {isMobileMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
       </div>
     );
   };
