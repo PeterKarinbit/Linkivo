@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
+import api from '../../services/apiBase';
 
 function TermsConsent({ onComplete }) {
   const { getToken } = useAuth();
@@ -34,20 +35,14 @@ function TermsConsent({ onComplete }) {
       setIsLoading(true);
 
       // Save AI Coach consent
-      const token = await getToken();
-      const baseOrigin = import.meta?.env?.VITE_API_BASE_URL || 'http://localhost:3000';
-      const response = await fetch(`${baseOrigin}/api/v1/enhanced-ai-career-coach/consent`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(consent)
-      });
+      // Save AI Coach consent
+      const response = await api.put('/enhanced-ai-career-coach/consent', consent);
 
-      if (!response.ok) {
-        throw new Error('Failed to save consent');
+      if (!response.success && !response.data) {
+        throw new Error(response.message || 'Failed to save consent');
       }
+
+
 
       onComplete({ consent, acceptedTerms: true });
     } catch (error) {
@@ -203,8 +198,8 @@ function TermsConsent({ onComplete }) {
             onClick={handleSubmit}
             disabled={isLoading || !acceptedTerms}
             className={`px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 ${isLoading || !acceptedTerms
-                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]'
+              ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+              : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]'
               }`}
           >
             {isLoading ? (
