@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../../services/apiBase';
+import { apiPost } from '../../services/apiBase';
 
 function KnowledgeBaseQuestions({ onComplete }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -121,15 +121,13 @@ function KnowledgeBaseQuestions({ onComplete }) {
       }));
 
       // Send to backend to build knowledge base
-      const response = await api.post('/enhanced-ai-career-coach/knowledge-base/questions', {
+      const response = await apiPost('/enhanced-ai-career-coach/knowledge-base/questions', {
         answers: formattedAnswers
       });
 
       if (!response.success) {
         throw new Error(response.message || 'Failed to save answers');
       }
-
-
 
       onComplete({ knowledgeBaseAnswers: formattedAnswers });
     } catch (error) {
