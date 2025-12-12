@@ -3,7 +3,7 @@ import api from '../../services/apiBase';
 import { FaBullseye, FaRocket, FaChartBar, FaHandshake, FaLightbulb, FaUsers, FaClock, FaCheckCircle, FaExclamationTriangle, FaEdit } from 'react-icons/fa';
 import { useAuth } from '@clerk/clerk-react';
 
-function EnhancedGoalSetting({ onComplete }) {
+function EnhancedGoalSetting({ onComplete, onSkip }) {
   const { getToken } = useAuth();
   const [careerGoals, setCareerGoals] = useState({
     short_term: [],
@@ -639,8 +639,16 @@ function EnhancedGoalSetting({ onComplete }) {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="text-center">
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          {onSkip && (
+            <button
+              onClick={onSkip}
+              className="px-8 py-3 rounded-lg font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              Skip for now
+            </button>
+          )}
           <button
             onClick={handleSubmit}
             disabled={isLoading || (careerGoals.short_term.length === 0 && careerGoals.long_term.length === 0)}

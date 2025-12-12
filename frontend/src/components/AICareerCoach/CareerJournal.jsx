@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { aiCoachService } from '../../services/aiCoachService';
 
-function CareerJournal({ onComplete }) {
+function CareerJournal({ onComplete, onSkip }) {
   const [journalEntry, setJournalEntry] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDraft, setIsDraft] = useState(false);
@@ -205,7 +205,7 @@ function CareerJournal({ onComplete }) {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
-              onClick={() => onComplete({ skipped: true })}
+              onClick={() => onSkip ? onSkip() : onComplete({ skipped: true })}
               className="px-8 py-3 rounded-full font-medium text-gray-500 hover:bg-gray-100 transition-colors"
             >
               Skip for now

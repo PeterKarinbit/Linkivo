@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { apiPost } from '../../services/apiBase';
 
-function KnowledgeBaseQuestions({ onComplete }) {
+function KnowledgeBaseQuestions({ onComplete, onSkip }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [showExplanation, setShowExplanation] = useState({});
   const [answers, setAnswers] = useState({
@@ -271,6 +271,16 @@ function KnowledgeBaseQuestions({ onComplete }) {
                 }`}
             >
               Save & Continue
+            </button>
+          )}
+
+          {/* Skip Button */}
+          {onSkip && (
+            <button
+              onClick={onSkip}
+              className="px-8 py-3 rounded-lg font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              Skip for now
             </button>
           )}
         </div>

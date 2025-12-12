@@ -51,11 +51,23 @@ function UserOnboaring() {
     handleStepChange('goals');
   };
 
+  const handleJournalSkip = () => {
+    handleStepChange('goals');
+  };
+
   const handleGoalsComplete = (data) => {
     handleStepChange('questions');
   };
 
+  const handleGoalsSkip = () => {
+    handleStepChange('questions');
+  };
+
   const handleQuestionsComplete = (data) => {
+    handleStepChange('consent');
+  };
+
+  const handleQuestionsSkip = () => {
     handleStepChange('consent');
   };
 
@@ -142,13 +154,13 @@ function UserOnboaring() {
         );
 
       case 'journal':
-        return <CareerJournal onComplete={handleJournalComplete} />;
+        return <CareerJournal onComplete={handleJournalComplete} onSkip={handleJournalSkip} />;
 
       case 'goals':
-        return <EnhancedGoalSetting onComplete={handleGoalsComplete} />;
+        return <EnhancedGoalSetting onComplete={handleGoalsComplete} onSkip={handleGoalsSkip} />;
 
       case 'questions':
-        return <KnowledgeBaseQuestions onComplete={handleQuestionsComplete} />;
+        return <KnowledgeBaseQuestions onComplete={handleQuestionsComplete} onSkip={handleQuestionsSkip} />;
 
       case 'consent':
         return <TermsConsent onComplete={handleConsentComplete} />;
