@@ -455,8 +455,8 @@ router.post('/journal', requireFeature('careerMemories'), asyncHandler(async (re
   const { content, entry_date, tags, title } = req.body;
   const userId = req.user._id;
 
-  if (!content || content.length < 100) {
-    throw new ApiError(400, "Journal content must be at least 100 characters");
+  if (!content || content.length < 10) {
+    throw new ApiError(400, "Journal content must be at least 10 characters");
   }
 
   if (content.length > 5000) {
