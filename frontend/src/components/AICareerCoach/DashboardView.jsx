@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Ivo from './CATDevChat';
+import api from '../../services/apiBase';
 
 import ProgressCompass from '../metrics/ProgressCompass';
 
@@ -44,19 +45,13 @@ const DashboardView = ({ navigateToStep, proactiveRecommendations, memoryUsage }
 
 
             try {
-                const headers = {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                    'Content-Type': 'application/json'
-                };
-
                 const [progressResp, journalResp] = await Promise.all([
-                    fetch('/api/v1/enhanced-ai-career-coach/progress', { headers }),
-                    fetch('/api/v1/enhanced-ai-career-coach/journal?limit=3', { headers })
+                    api.get('/enhanced-ai-career-coach/progress'),
+                    api.get('/enhanced-ai-career-coach/journal?limit=3')
                 ]);
 
-                if (progressResp.ok) {
-                    const res = await progressResp.json();
-                    const data = res.data || {};
+                if (progressResp.success && progressResp.data) {
+                    const data = progressResp.data || {};
 
                     let computedScore = 0;
                     if (data.dimensions && Array.isArray(data.dimensions)) {
@@ -77,10 +72,9 @@ const DashboardView = ({ navigateToStep, proactiveRecommendations, memoryUsage }
                     }
                 }
 
-                if (journalResp.ok) {
-                    const res = await journalResp.json();
-                    if (res.data && Array.isArray(res.data.items)) {
-                        setRecentJournals(res.data.items);
+                if (journalResp.success && journalResp.data) {
+                    if (journalResp.data && Array.isArray(journalResp.data.items)) {
+                        setRecentJournals(journalResp.data.items);
                     }
                 }
 
