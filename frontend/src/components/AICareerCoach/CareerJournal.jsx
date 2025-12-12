@@ -8,7 +8,7 @@ function CareerJournal({ onComplete }) {
   const [isOnline, setIsOnline] = useState(() => typeof navigator !== 'undefined' ? navigator.onLine : true);
   const textareaRef = useRef(null);
 
-  const minWords = 50;
+  const minWords = 5;
   const maxWords = 2000;
   const wordCount = journalEntry.trim().split(/\s+/).filter(word => word.length > 0).length;
 
