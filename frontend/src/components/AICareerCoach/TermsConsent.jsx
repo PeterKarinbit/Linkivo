@@ -35,15 +35,9 @@ function TermsConsent({ onComplete }) {
       setIsLoading(true);
 
       // Save AI Coach consent
-      // Save AI Coach consent
-      const response = await api.put('/enhanced-ai-career-coach/consent', consent);
+      await api.put('/enhanced-ai-career-coach/consent', consent);
 
-      if (!response.success && !response.data) {
-        throw new Error(response.message || 'Failed to save consent');
-      }
-
-
-
+      // If we got here without error, consent was saved
       onComplete({ consent, acceptedTerms: true });
     } catch (error) {
       console.error('Error saving consent:', error);
