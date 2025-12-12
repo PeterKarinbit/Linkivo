@@ -67,7 +67,9 @@ const corsOptions = {
     "Origin",
     "X-Auth-Token",
     "X-API-Key",
-    "x-ai-model"
+    "x-ai-model",
+    "Cache-Control",
+    "Pragma"
   ],
   exposedHeaders: [
     "Content-Length",
