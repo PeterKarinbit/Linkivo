@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../services/apiBase';
 import { motion } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import WelcomeSequence from '../components/AICareerCoach/WelcomeSequence';
@@ -128,19 +129,11 @@ function EnhancedAICareerCoach() {
     try {
       setIsLoading(true);
       // Try to fetch from API first
-      const resp = await fetch('/api/v1/enhanced-ai-career-coach/recommendations', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const resp = await api.get('/enhanced-ai-career-coach/recommendations');
 
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data?.success && data?.data?.recommendations) {
-          setProactiveRecommendations(data.data.recommendations);
-          return;
-        }
+      if (resp.success && resp.data?.recommendations) {
+        setProactiveRecommendations(resp.data.recommendations);
+        return;
       }
 
       // Fallback: Try AI agents if enabled
@@ -161,15 +154,9 @@ function EnhancedAICareerCoach() {
 
   const loadUsage = async () => {
     try {
-      const resp = await fetch('/api/v1/subscription/usage', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        const cm = data?.data?.careerMemories;
+      const resp = await api.get('/subscription/usage');
+      if (resp.success && resp.data) {
+        const cm = resp.data.careerMemories;
         if (cm) {
           const pct = cm.limit === -1 ? 0 : Math.min(100, Math.round((cm.used / Math.max(1, cm.limit)) * 100));
           setMemoryUsage({ used: cm.used ?? 0, limit: cm.limit ?? 0, pct });
