@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import api from '../../services/apiBase';
 
 function KnowledgeBaseQuestions({ onComplete }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,7 +11,7 @@ function KnowledgeBaseQuestions({ onComplete }) {
     q3: 50, // How much do you value continuous learning and skill development?
     q4: 50, // How important is salary/compensation in your career decisions?
     q5: 50, // How much do you enjoy working in a team vs. independently?
-    
+
     // Page 2 Questions
     q6: 50, // How important is company culture and values alignment?
     q7: 50, // How comfortable are you with job changes and career pivots?
@@ -113,26 +114,22 @@ function KnowledgeBaseQuestions({ onComplete }) {
       const formattedAnswers = Object.keys(answers).map((key, index) => ({
         questionId: key,
         questionNumber: index + 1,
-        question: questions.page1.find(q => q.id === key)?.question || 
-                  questions.page2.find(q => q.id === key)?.question || '',
+        question: questions.page1.find(q => q.id === key)?.question ||
+          questions.page2.find(q => q.id === key)?.question || '',
         answer: answers[key],
         answerLabel: getSliderLabel(answers[key])
       }));
 
       // Send to backend to build knowledge base
-      const baseOrigin = import.meta?.env?.VITE_API_BASE_URL || 'http://localhost:3000';
-      const response = await fetch(`${baseOrigin}/api/v1/enhanced-ai-career-coach/knowledge-base/questions`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ answers: formattedAnswers })
+      const response = await api.post('/enhanced-ai-career-coach/knowledge-base/questions', {
+        answers: formattedAnswers
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save answers');
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to save answers');
       }
+
+
 
       onComplete({ knowledgeBaseAnswers: formattedAnswers });
     } catch (error) {
@@ -198,7 +195,7 @@ function KnowledgeBaseQuestions({ onComplete }) {
                     {answers[q.id]}%
                   </span>
                 </div>
-                
+
                 {/* Slider */}
                 <div className="space-y-2">
                   <div className="relative">
@@ -214,7 +211,7 @@ function KnowledgeBaseQuestions({ onComplete }) {
                       }}
                     />
                   </div>
-                  
+
                   {/* Labels */}
                   <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                     <span>{q.labels.left}</span>
@@ -223,17 +220,16 @@ function KnowledgeBaseQuestions({ onComplete }) {
                     </span>
                     <span>{q.labels.right}</span>
                   </div>
-                  
+
                   {/* Degree Bar Visualization */}
                   <div className="flex items-center gap-1 mt-2">
                     {[...Array(10)].map((_, i) => (
                       <div
                         key={i}
-                        className={`h-2 flex-1 rounded ${
-                          i * 10 < answers[q.id]
-                            ? getSliderColor(answers[q.id])
-                            : 'bg-gray-200 dark:bg-gray-700'
-                        }`}
+                        className={`h-2 flex-1 rounded ${i * 10 < answers[q.id]
+                          ? getSliderColor(answers[q.id])
+                          : 'bg-gray-200 dark:bg-gray-700'
+                          }`}
                       />
                     ))}
                   </div>
@@ -248,24 +244,22 @@ function KnowledgeBaseQuestions({ onComplete }) {
           <button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              currentPage === 1
-                ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-600 hover:bg-gray-700 text-white'
-            }`}
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${currentPage === 1
+              ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
+              : 'bg-gray-600 hover:bg-gray-700 text-white'
+              }`}
           >
             Previous
           </button>
-          
+
           {currentPage === 1 ? (
             <button
               onClick={() => setCurrentPage(2)}
               disabled={!allAnswered}
-              className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                !allAnswered
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white'
-              }`}
+              className={`px-6 py-3 rounded-lg font-medium transition-all ${!allAnswered
+                ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white'
+                }`}
             >
               Next Page
             </button>
@@ -273,11 +267,10 @@ function KnowledgeBaseQuestions({ onComplete }) {
             <button
               onClick={handleSubmit}
               disabled={!allAnswered}
-              className={`px-8 py-3 rounded-lg font-medium transition-all ${
-                !allAnswered
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white'
-              }`}
+              className={`px-8 py-3 rounded-lg font-medium transition-all ${!allAnswered
+                ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white'
+                }`}
             >
               Save & Continue
             </button>
