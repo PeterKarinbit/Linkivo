@@ -39,16 +39,22 @@ function CareerJournal({ onComplete }) {
 
     if (wordCount >= minWords) {
       try {
+        console.log('Saving journal entry...');
         // Mark as onboarding source for proper extraction and storage
         const entry = await aiCoachService.createJournalEntry(
           journalEntry,
           new Date(),
           ['onboarding'] // Tags to indicate this is from onboarding
         );
+        console.log('Journal entry saved:', entry);
         localStorage.removeItem('career-journal-draft');
         onComplete({ journalEntry: entry });
       } catch (e) {
-        alert('Failed to save entry. Please try again.');
+        console.error('Failed to save journal entry:', e);
+        // If 401, it might be auth, but we can't easily fix that from here without re-login.
+        // Fallback: Skip saving if it really fails, so user doesn't get stuck?
+        // No, show error.
+        alert('Failed to save entry. Please ensure you are logged in or try again.');
       }
     }
   };
