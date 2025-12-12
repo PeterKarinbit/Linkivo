@@ -146,13 +146,14 @@ function LoginSignUp() {
   useEffect(() => {
     const checkSession = async () => {
       if (!isLoaded) return;
-      if (isSignedIn) {
+      // If signed in AND NOT verifying email (to prevent race condition with handleVerifyEmail)
+      if (isSignedIn && !verificationStep) {
         console.log("User already signed in, redirecting to home...");
         navigate("/home-logged-in");
       }
     };
     checkSession();
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, verificationStep]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -230,7 +231,7 @@ function LoginSignUp() {
           if (current) console.warn("Signup taking too long, resetting state.");
           return false;
         });
-      }, 15000);
+      }, 60000); // Increased to 60s to avoid premature reset
 
       const baseName = formData.email.split("@")[0].replace(/[^a-zA-Z0-9]/g, "");
       const username = `${baseName}${Math.floor(Math.random() * 10000)}`;
