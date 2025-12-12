@@ -225,8 +225,7 @@ function AIRecommendations() {
               }
               try {
                 const pollResp = await api.get('/enhanced-ai-career-coach/roadmap/status', {
-                  timeout: 5000,
-                  headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+                  timeout: 5000
                 });
                 const pollStatus = pollResp?.data?.data?.status;
 
