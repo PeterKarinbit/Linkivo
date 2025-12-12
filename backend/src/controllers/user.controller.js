@@ -1017,6 +1017,7 @@ const uploadPortfolioFile = asyncHandler(async (req, res) => {
               const MAX_SKILLS_PER_UPLOAD = 50; // Limit skills per upload
               const MAX_TOTAL_SKILLS = 200; // Limit total skills per user
 
+              let newSkills = [];
               for (const skillData of analysisResult.skills) {
                 // Stop if we've added too many skills
                 if (skillsAdded >= MAX_SKILLS_PER_UPLOAD) {
@@ -1039,8 +1040,11 @@ const uploadPortfolioFile = asyncHandler(async (req, res) => {
                     !existingSkills.has(normalizedSkill.toLowerCase()) &&
                     validateSkillName(normalizedSkill)) {
                     if (!user.userProfile.skills) user.userProfile.skills = [];
+
+                    // Add to user profile but also track locally for logging
                     user.userProfile.skills.push(normalizedSkill);
                     existingSkills.add(normalizedSkill.toLowerCase());
+                    newSkills.push(normalizedSkill);
                     skillsAdded++;
                   } else {
                     console.warn(`[UPLOAD] Skipped invalid or duplicate skill: ${skillName}`);
@@ -1049,11 +1053,26 @@ const uploadPortfolioFile = asyncHandler(async (req, res) => {
               }
 
               if (skillsAdded > 0) {
+                // Explicitly mark modified regardless of array method used
                 user.markModified('userProfile.skills');
-                await user.save();
-                console.log(`[UPLOAD] Added ${skillsAdded} new validated skills to user profile`);
+                // Save user with retry on version error
+                try {
+                  await user.save();
+                  console.log(`[UPLOAD] Added ${skillsAdded} new validated skills to user profile:`, newSkills);
+                } catch (saveError) {
+                  console.error('[UPLOAD] Failed to save user skills:', saveError);
+                  // Retry once
+                  const freshUser = await User.findById(userId);
+                  if (freshUser) {
+                    freshUser.userProfile.skills = [...new Set([...(freshUser.userProfile.skills || []), ...newSkills])];
+                    freshUser.markModified('userProfile.skills');
+                    await freshUser.save();
+                  }
+                }
               }
             }
+          } else {
+            console.warn('[UPLOAD] No skills returned from analysis result');
           }
 
           // 5. Generate recommendations
