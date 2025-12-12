@@ -90,6 +90,7 @@ function LoginSignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [verificationStep, setVerificationStep] = useState(false);
   const [isLoginVerification, setIsLoginVerification] = useState(false);
+  const [isMfaStep, setIsMfaStep] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [showDevPopup, setShowDevPopup] = useState(false);
 
@@ -222,6 +223,31 @@ function LoginSignUp() {
           }
         }
 
+        // Handle MFA/TOTP required during Login
+        if (result.status === "needs_second_factor") {
+          const totpFactor = result.supportedSecondFactors?.find(
+            (factor) => factor.strategy === "totp"
+          );
+
+          if (totpFactor) {
+            setIsMfaStep(true);
+            setVerificationStep(true);
+            setErrorMessage("Enter your authenticator code");
+            return;
+          } else {
+            // Check for backup codes as fallback
+            const backupFactor = result.supportedSecondFactors?.find(
+              (factor) => factor.strategy === "backup_code"
+            );
+            if (backupFactor) {
+              setIsMfaStep(true);
+              setVerificationStep(true);
+              setErrorMessage("Enter a backup code");
+              return;
+            }
+          }
+        }
+
         setErrorMessage(`Login incomplete. Status: ${result.status}`);
       }
     } catch (err) {
@@ -284,7 +310,13 @@ function LoginSignUp() {
 
     try {
       let completeSignUp;
-      if (isLoginVerification) {
+      if (isMfaStep) {
+        // Handle MFA/TOTP Verification (Second Factor)
+        completeSignUp = await signIn.attemptSecondFactor({
+          strategy: "totp",
+          code: verificationCode,
+        });
+      } else if (isLoginVerification) {
         // Handle Login Verification (First Factor)
         completeSignUp = await signIn.attemptFirstFactor({
           strategy: "email_code",
@@ -298,9 +330,9 @@ function LoginSignUp() {
       }
 
       if (completeSignUp.status === "complete") {
-        await (isLoginVerification ? setActiveSignIn : setActiveSignUp)({
-          session: completeSignUp.createdSessionId
-        });
+        // Determine which setActive to use based on flow type
+        const setActiveSession = (isMfaStep || isLoginVerification) ? setActiveSignIn : setActiveSignUp;
+        await setActiveSession({ session: completeSignUp.createdSessionId });
 
         let retries = 3;
         let token = null;
