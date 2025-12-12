@@ -1,0 +1,15 @@
+{
+    "name": "Linkivo Environment",
+    "values": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:3000",
+            "enabled": true
+        },
+        {
+            "key": "access_token",
+            "value": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zNmdtU2h4WkVkQ3ZGM0JHMU9iRFVMSTJIR2wiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL3JlbGF4ZWQtY3VzdGFyZC0yNGNmMTMubmV0bGlmeS5hcHAiLCJleHAiOjE3NjU1MDk1MjIsImZ2YSI6WzgxLC0xXSwiaWF0IjoxNzY1NTA9NDYyLCJpc3MiOiJodHRwczovL3dlbGNvbWUtY3JhbmUtMy5jbGVyay5hY2NvdW50cy5kZXYiLCJuYmYiOjE3NjU1MDk0NTIsInNpZCI6InNlc3NfMzZqMEh2blplTXltMURIMFltRFhxS2E0c3pEIiwic3RzIjoiYWN0aXZlIiwic3ViIjoidXNlcl8zNmowSHczcDlBempWVzhWVHVlY3RHVkZPSFciLCJ2IjoyfQ.smbE_db9F_jb-IZBiNe2cmhdIpUV3r5Km3OekRFclipl_Zr_Ucujjksds5aVzgt64h8Bp8zugU43G_ZlNy6zGZtD7FiMJoa1kH2RrA6DUAqlQv8QXAgubBIE8btIZ8q4n6qH9VXeRS5MJaMuOQnq98zSzkh_i5EOHUF5CgVVJZI3KUs623CaRBfjN_N6YXYHHQ-crtffS99YgfpaqAWJpVOmlLlh2fhW8D9aS4oQklOUWTT6yk5LuYZxkJ9XaMh5CKulQKTp0y9_tQDtboHTzlI4NfZL112g9P9jNVPfJUxYxv4Zlf7lc5YklljQtf25IcQDDI9dzDnkWrB5STb2jw",
+            "enabled": true
+        }
+    ]
+}
