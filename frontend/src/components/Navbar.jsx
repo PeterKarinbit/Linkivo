@@ -398,7 +398,7 @@ function Navbar() {
                   <div
                     className="rounded-full h-9 w-9 hover:cursor-pointer overflow-hidden flex justify-center items-center border border-gray-300 dark:border-gray-600"
                     onClick={() => {
-                      if (userData.role !== "employer") {
+                      if (userData?.role !== "employer") {
                         toggleProfileDropdown();
                       } else {
                         navigate("/dashboard/home");

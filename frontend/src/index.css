@@ -130,138 +130,6 @@
   border-radius: 4px;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Global font improvements for better clarity */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-/* Dark mode text improvements */
-.dark {
-  color-scheme: dark;
-}
-
-.dark * {
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-/* Improved contrast for dark mode text */
-.dark .text-gray-300 {
-  color: rgb(209 213 219) !important;
-}
-
-.dark .text-gray-400 {
-  color: rgb(156 163 175) !important;
-}
-
-.dark .text-gray-500 {
-  color: rgb(107 114 128) !important;
-}
-
-.dark .text-gray-600 {
-  color: rgb(75 85 99) !important;
-}
-
-/* Enhanced font weights for better readability */
-.font-medium {
-  font-weight: 500;
-}
-
-.font-semibold {
-  font-weight: 600;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-/* Improved input and form element readability */
-.dark input::placeholder,
-.dark textarea::placeholder {
-  color: rgb(156 163 175) !important;
-  opacity: 1;
-}
-
-.dark input,
-.dark textarea,
-.dark select {
-  color: rgb(255 255 255) !important;
-}
-
-/* Better button text contrast */
-.dark button {
-  font-weight: 500;
-}
-
-/* Enhanced link readability */
-.dark a {
-  color: rgb(59 130 246);
-}
-
-.dark a:hover {
-  color: rgb(37 99 235);
-}
-
-/* Enhanced button visibility in dark mode */
-.dark .bg-gray-100 {
-  background-color: rgb(55 65 81) !important;
-}
-
-.dark .bg-gray-200 {
-  background-color: rgb(75 85 99) !important;
-}
-
-.dark .text-gray-700 {
-  color: rgb(229 231 235) !important;
-}
-
-.dark .text-gray-800 {
-  color: rgb(243 244 246) !important;
-}
-
-/* Improved button hover states in dark mode */
-.dark .hover\:bg-gray-100:hover {
-  background-color: rgb(75 85 99) !important;
-}
-
-.dark .hover\:bg-gray-200:hover {
-  background-color: rgb(107 114 128) !important;
-}
-
-/* Enhanced border visibility in dark mode */
-.dark .border-gray-200 {
-  border-color: rgb(75 85 99) !important;
-}
-
-.dark .border-gray-300 {
-  border-color: rgb(107 114 128) !important;
-}
-
-.scrollable-list {
-  @apply max-h-60 overflow-y-auto;
-}
-
-/* Custom scrollbar for better visibility in dark mode */
-.dark ::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: rgb(31 41 55);
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: rgb(75 85 99);
-  border-radius: 4px;
-}
-
 .dark ::-webkit-scrollbar-thumb:hover {
   background: rgb(107 114 128);
 }
@@ -271,13 +139,17 @@
   html {
     font-size: 14px;
     /* Default is usually 16px, this makes REM units smaller */
-    /* zoom: 0.9;  Use font-size scaling instead of zoom as it's more standard compliant */
   }
 }
 
-/* Mobile Input Optimization - Prevent iOS zoom on focus */
+/* Mobile Optimization */
 @media screen and (max-width: 768px) {
+  html {
+    font-size: 13.5px;
+    /* Slightly smaller base text for mobile (approx 85% of 16px) */
+  }
 
+  /* Prevent iOS zoom on focus but don't force it everywhere if it breaks layout */
   input,
   select,
   textarea {

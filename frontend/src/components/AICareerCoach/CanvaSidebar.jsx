@@ -327,7 +327,7 @@ const CanvaSidebar = ({
     return (
         <div className="flex h-full z-40 relative font-sans">
             {/* 1. Icon Strip (Fixed Width: 80px for better spacing) */}
-            <div className="w-[80px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center py-6 z-20 relative h-full shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+            <div className="w-[60px] md:w-[80px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center py-6 z-20 relative h-full shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-all duration-300">
                 <div className="mb-8">
                     <div className="w-12 h-12 rounded-xl overflow-hidden shadow-xl ring-2 ring-slate-100 dark:ring-slate-800">
                         <img src={IvoGuide} alt="Ivo Guide" className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500" />
@@ -371,7 +371,7 @@ const CanvaSidebar = ({
 
             {/* 2. Content Panel (Slide out: 300px) */}
             <div
-                className={`absolute left-[80px] top-0 h-full w-[300px] bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) z-10 flex flex-col ${isOpen ? 'translate-x-0 shadow-[8px_0_30px_rgba(0,0,0,0.04)]' : '-translate-x-full opacity-0'
+                className={`absolute left-[60px] md:left-[80px] top-0 h-full w-[85vw] max-w-[300px] bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) z-10 flex flex-col ${isOpen ? 'translate-x-0 shadow-[8px_0_30px_rgba(0,0,0,0.04)]' : '-translate-x-full opacity-0'
                     }`}
             >
                 {/* Panel Header */}

@@ -369,7 +369,7 @@ function LoginSignUp() {
 
           {/* Header */}
           <div className="text-center lg:text-left space-y-2">
-            <h2 className="text-4xl font-serif font-bold text-gray-900">
+            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">
               {isLogin ? "Welcome Back" : verificationStep ? "Verify Email" : "Start Your Journey"}
             </h2>
             <p className="text-gray-500 text-sm">

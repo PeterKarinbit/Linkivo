@@ -3,7 +3,14 @@ import React, { useState } from 'react';
 import { AiOutlineWarning, AiOutlineClose } from 'react-icons/ai';
 
 const BetaBanner = () => {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(() => {
+        return localStorage.getItem('ivo-beta-banner-dismissed') !== 'true';
+    });
+
+    const handleDismiss = () => {
+        setIsVisible(false);
+        localStorage.setItem('ivo-beta-banner-dismissed', 'true');
+    };
 
     if (!isVisible) return null;
 
@@ -22,7 +29,7 @@ const BetaBanner = () => {
                     </a>
                 </p>
                 <button
-                    onClick={() => setIsVisible(false)}
+                    onClick={handleDismiss}
                     className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded-full transition-colors"
                     aria-label="Close banner"
                 >
