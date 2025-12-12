@@ -9,6 +9,7 @@ import { ResumeProvider } from "./context/ResumeContext";
 import { TourProvider } from "./context/TourContext";
 import NetworkError from "./components/NetworkError";
 import ClerkAuthStateSync from "./components/ClerkAuthStateSync";
+import BetaBanner from "./components/BetaBanner";
 
 function App() {
   const { status, userData, token } = useSelector((store) => store.auth);
@@ -51,6 +52,7 @@ function App() {
           <div className={`font-Poppins ${showNavbar ? "pt-20" : "pt-0"}`}>
             <ClerkAuthStateSync />
             <NetworkError />
+            <BetaBanner />
             {showNavbar && <Navbar />}
             <AllRoutes />
           </div>
