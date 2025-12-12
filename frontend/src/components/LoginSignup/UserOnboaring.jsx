@@ -105,63 +105,64 @@ function UserOnboaring() {
                 Upload Your Resume?
               </h2>
 
-              Uploading your resume helps Ivo personalize your career insights immediately.
-            </p>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+                Uploading your resume helps Ivo personalize your career insights immediately.
+              </p>
 
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-xl p-4 mb-8 text-left">
-              <div className="flex items-start gap-3">
-                <i className="fa-solid fa-triangle-exclamation text-amber-500 mt-1"></i>
-                <div>
-                  <h4 className="font-bold text-amber-800 dark:text-amber-400 text-sm mb-1">Important Heads Up</h4>
-                  <p className="text-xs text-amber-700 dark:text-amber-300">
-                    Please upload a <strong>structured resume</strong> (PDF or DOCX). Simple text files or images might not be analyzed correctly. A well-structured resume ensures a smooth experience in the Career Hub.
-                  </p>
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-xl p-4 mb-8 text-left">
+                <div className="flex items-start gap-3">
+                  <i className="fa-solid fa-triangle-exclamation text-amber-500 mt-1"></i>
+                  <div>
+                    <h4 className="font-bold text-amber-800 dark:text-amber-400 text-sm mb-1">Important Heads Up</h4>
+                    <p className="text-xs text-amber-700 dark:text-amber-300">
+                      Please upload a <strong>structured resume</strong> (PDF or DOCX). Simple text files or images might not be analyzed correctly. A well-structured resume ensures a smooth experience in the Career Hub.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => handleResumeChoice('skip')}
-                className="px-8 py-3 rounded-xl font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              >
-                Skip for now
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => handleResumeChoice('skip')}
+                  className="px-8 py-3 rounded-xl font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Skip for now
+                </button>
 
-              <button
-                onClick={() => handleResumeChoice('upload')}
-                className="px-8 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2"
-              >
-                <FaFileUpload />
-                Upload Resume
-              </button>
+                <button
+                  onClick={() => handleResumeChoice('upload')}
+                  className="px-8 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2"
+                >
+                  <FaFileUpload />
+                  Upload Resume
+                </button>
+              </div>
             </div>
           </div>
-          </div >
         );
 
       case 'journal':
-  return <CareerJournal onComplete={handleJournalComplete} />;
+        return <CareerJournal onComplete={handleJournalComplete} />;
 
       case 'goals':
-  return <EnhancedGoalSetting onComplete={handleGoalsComplete} />;
+        return <EnhancedGoalSetting onComplete={handleGoalsComplete} />;
 
       case 'questions':
-  return <KnowledgeBaseQuestions onComplete={handleQuestionsComplete} />;
+        return <KnowledgeBaseQuestions onComplete={handleQuestionsComplete} />;
 
       case 'consent':
-  return <TermsConsent onComplete={handleConsentComplete} />;
+        return <TermsConsent onComplete={handleConsentComplete} />;
 
       default:
-  return <WelcomeSequence onComplete={handleWelcomeComplete} />;
-}
+        return <WelcomeSequence onComplete={handleWelcomeComplete} />;
+    }
   };
 
-return (
-  <div className="user-onboarding-flow">
-    {renderStep()}
-  </div>
-);
+  return (
+    <div className="user-onboarding-flow">
+      {renderStep()}
+    </div>
+  );
 }
 
 export default UserOnboaring;
