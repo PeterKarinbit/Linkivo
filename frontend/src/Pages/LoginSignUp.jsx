@@ -89,6 +89,7 @@ function LoginSignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [verificationStep, setVerificationStep] = useState(false);
+  const [isLoginVerification, setIsLoginVerification] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [showDevPopup, setShowDevPopup] = useState(false);
 
@@ -199,7 +200,29 @@ function LoginSignUp() {
           navigate("/");
         }
       } else {
-        setErrorMessage("Login incomplete. Check console.");
+        console.error("Login Incomplete Result:", result);
+
+        // Handle Email Verification required during Login
+        if (result.status === "needs_first_factor") {
+          const emailFactor = result.supportedFirstFactors?.find(
+            (factor) => factor.strategy === "email_code"
+          );
+
+          if (emailFactor) {
+            // Trigger the email code
+            await signIn.prepareFirstFactor({
+              strategy: "email_code",
+              emailAddressId: emailFactor.emailAddressId,
+            });
+
+            setIsLoginVerification(true);
+            setVerificationStep(true);
+            setErrorMessage(""); // Clear error
+            return;
+          }
+        }
+
+        setErrorMessage(`Login incomplete. Status: ${result.status}`);
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -260,12 +283,24 @@ function LoginSignUp() {
     setErrorMessage("");
 
     try {
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
-        code: verificationCode,
-      });
+      let completeSignUp;
+      if (isLoginVerification) {
+        // Handle Login Verification (First Factor)
+        completeSignUp = await signIn.attemptFirstFactor({
+          strategy: "email_code",
+          code: verificationCode,
+        });
+      } else {
+        // Handle Signup Verification
+        completeSignUp = await signUp.attemptEmailAddressVerification({
+          code: verificationCode,
+        });
+      }
 
       if (completeSignUp.status === "complete") {
-        await setActiveSignUp({ session: completeSignUp.createdSessionId });
+        await (isLoginVerification ? setActiveSignIn : setActiveSignUp)({
+          session: completeSignUp.createdSessionId
+        });
 
         let retries = 3;
         let token = null;
